@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script src='https://lf-package-cn.feishucdn.com/obj/feishu-static/op/fe/devtools_frontend/remote-debug-0.0.1-alpha.6.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都白酒消费市场调研问卷</title>
+    <style>
+        /* 基础样式，简洁易扩展 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            color: #8B0000; /* 白酒主题红色调 */
+            margin-bottom: 10px;
+        }
+
+        .intro {
+            margin: 20px 0;
+            padding: 15px;
+            background: #faf6f0;
+            border-left: 4px solid #8B0000;
+        }
+
+        /* 问卷章节样式 */
+        section {
+            margin: 30px 0;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+            section h2 {
+                color: #8B0000;
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+            }
+
+        .question {
+            margin: 20px 0;
+        }
+
+            .question p {
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .option-item {
+            margin: 8px 0;
+        }
+
+        /* 评分题样式 */
+        .rating-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+            .rating-table th, .rating-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .rating-table th {
+                background: #faf6f0;
+            }
+
+        /* 文本输入框样式 */
+        textarea, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 80px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: block;
+            width: 200px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            background: #8B0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 20px auto;
+            transition: background 0.3s;
+        }
+
+            .btn:hover {
+                background: #A52A2A;
+            }
+
+        /* 彩蛋画像样式 */
+        #portrait-result {
+            display: none;
+            margin: 20px 0;
+            padding: 20px;
+            background: #faf6f0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #8B0000;
+            font-weight: 600;
+        }
+
+        /* 隐藏章节的样式 */
+        .hidden {
+            display: none;
+        }
+
+        /* 其他输入框样式 */
+        .other-input {
+            width: 200px !important;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* 提交状态提示 */
+        #submit-status {
+            text-align: center;
+            margin: 10px 0;
+            color: #8B0000;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 问卷头部 -->
+        <header>
+            <h1>成都白酒消费市场调研问卷（创新优化版）</h1>
+            <div class="intro">
+                <p>您好！我们是XX学校的学生，正在开展成都白酒消费市场调研。问卷数据仅用于学术研究，严格保密个人信息，预计占用您3-5分钟时间。完成问卷后可自动生成你的「成都白酒消费偏好画像」，感谢您的配合！</p>
+            </div>
+        </header>
+
+        <!-- 表单主体 -->
+        <form id="questionnaire-form">
+            <!-- 一、基本信息 -->
+            <section id="basic-info">
+                <h2>一、基本信息（科学分组+趣味标签）</h2>
+                
+                <div class="question">
+                    <p>1. 您的性别：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="gender" id="gender-male" value="男" required> <label for="gender-male">男</label></div>
+                        <div class="option-item"><input type="radio" name="gender" id="gender-female" value="女"> <label for="gender-female">女</label></div>
+                    </div>
+                    <small>划分依据：性别是影响白酒消费频率、香型偏好的核心人口统计学变量...</small>
+                </div>
+
+                <div class="question">
+                    <p>2. 您的年龄段（选完自动匹配消费标签）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="age" id="age-18-25" value="18-25岁" required> <label for="age-18-25">18-25岁（学生/初入职场，社交尝鲜派）</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-26-35" value="26-35岁"> <label for="age-26-35">26-35岁（职场中坚，商务聚会主力军）</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-36-45" value="36-45岁"> <label for="age-36-45">36-45岁（成熟职场，礼赠宴请核心层）</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-46-55" value="46-55岁"> <label for="age-46-55">46-55岁（中年稳定期，自饮品鉴爱好者）</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-55+" value="55岁以上"> <label for="age-55+">55岁以上（退休/半退休，传统品牌忠实粉）</label></div>
+                    </div>
+                    <small>划分依据：参照白酒行业消费群体细分标准...</small>
+                </div>
+
+                <div class="question">
+                    <p>3. 您的月收入/生活费区间：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="income" id="income-2000-" value="2000元及以下" required> <label for="income-2000-">2000元及以下</label></div>
+                        <div class="option-item"><input type="radio" name="income" id="income-2001-4000" value="2001-4000元"> <label for="income-2001-4000">2001-4000元</label></div>
+                        <div class="option-item"><input type="radio" name="income" id="income-4001-6000" value="4001-6000元"> <label for="income-4001-6000">4001-6000元</label></div>
+                        <div class="option-item"><input type="radio" name="income" id="income-6001-10000" value="6001-10000元"> <label for="income-6001-10000">6001-10000元</label></div>
+                        <div class="option-item"><input type="radio" name="income" id="income-10001-15000" value="10001-15000元"> <label for="income-10001-15000">10001-15000元</label></div>
+                        <div class="option-item"><input type="radio" name="income" id="income-15000+" value="15000元以上"> <label for="income-15000+">15000元以上</label></div>
+                    </div>
+                    <small>划分依据：收入水平直接决定白酒消费的价格区间与购买频次...</small>
+                </div>
+
+                <div class="question">
+                    <p>4. 您的职业类型：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-student" value="在校学生" required> <label for="occ-student">在校学生</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-staff" value="企业普通职员"> <label for="occ-staff">企业普通职员</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-manager" value="企业管理人员"> <label for="occ-manager">企业管理人员</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-individual" value="个体工商户"> <label for="occ-individual">个体工商户</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-freelance" value="自由职业者"> <label for="occ-freelance">自由职业者</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-retired" value="退休人员"> <label for="occ-retired">退休人员</label></div>
+                        <div class="option-item"><input type="radio" name="occupation" id="occ-other" value="其他"> <label for="occ-other">其他</label>
+                            <input type="text" name="occupation-other" placeholder="请填写具体职业" class="other-input">
+                        </div>
+                    </div>
+                    <small>划分依据：职业关联消费场景（如企业管理人员高频商务宴请）...</small>
+                </div>
+            </section>
+
+            <!-- 二、白酒消费行为 -->
+            <section id="consumption-behavior">
+                <h2>二、白酒消费行为（程度分级+场景联想）</h2>
+                
+                <div class="question">
+                    <p>1. 您饮用白酒的频率（合并原“是否饮用”，用程度直接区分群体）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-daily" value="几乎每天" required> <label for="freq-daily">几乎每天</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-3-5" value="每周3-5次"> <label for="freq-3-5">每周3-5次</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-1-2" value="每周1-2次"> <label for="freq-1-2">每周1-2次</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-month-1-2" value="每月1-2次"> <label for="freq-month-1-2">每月1-2次</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-festival" value="仅节日/聚会饮用"> <label for="freq-festival">仅节日/聚会饮用</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-half-year" value="半年及以上一次"> <label for="freq-half-year">半年及以上一次</label></div>
+                        <div class="option-item"><input type="radio" name="drink-frequency" id="freq-never" value="从不饮用（选此项跳转至第六部分）"> <label for="freq-never">从不饮用（选此项跳转至第六部分）</label></div>
+                    </div>
+                </div>
+
+                <div class="question" id="drink-amount">
+                    <p>2. 您单次饮用白酒的量（附直观参照）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="drink-amount" id="amount-50-" value="50ml及以下"> <label for="amount-50-">50ml及以下（约1两，小酒杯1杯）</label></div>
+                        <div class="option-item"><input type="radio" name="drink-amount" id="amount-51-100" value="51-100ml"> <label for="amount-51-100">51-100ml（1-2两，小酒杯2杯）</label></div>
+                        <div class="option-item"><input type="radio" name="drink-amount" id="amount-101-200" value="101-200ml"> <label for="amount-101-200">101-200ml（2-4两，常规玻璃杯1杯）</label></div>
+                        <div class="option-item"><input type="radio" name="drink-amount" id="amount-200+" value="200ml以上"> <label for="amount-200+">200ml以上（4两以上）</label></div>
+                    </div>
+                </div>
+
+                <div class="question" id="price-range">
+                    <p>3. 您常购买的白酒单价区间（对应消费定位）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="price-range" id="price-50-" value="50元及以下"> <label for="price-50-">50元及以下（亲民口粮酒）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-51-100" value="51-100元"> <label for="price-51-100">51-100元（日常小酌款）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-101-200" value="101-200元"> <label for="price-101-200">101-200元（朋友聚会档）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-201-300" value="201-300元"> <label for="price-201-300">201-300元（家庭聚餐级）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-301-500" value="301-500元"> <label for="price-301-500">301-500元（宴请体面选）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-501-1000" value="501-1000元"> <label for="price-501-1000">501-1000元（高端礼赠款）</label></div>
+                        <div class="option-item"><input type="radio" name="price-range" id="price-1000+" value="1000元以上"> <label for="price-1000+">1000元以上（收藏品鉴级）</label></div>
+                    </div>
+                </div>
+
+                <div class="question" id="hotpot-wine">
+                    <p>4. 【互动题】 成都火锅局必带白酒投票（可多选，可补充）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-wuliangye" value="五粮液"> <label for="wine-wuliangye">五粮液</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-luzhou" value="泸州老窖"> <label for="wine-luzhou">泸州老窖</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-jiannanchun" value="剑南春"> <label for="wine-jiannanchun">剑南春</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-quanxing" value="全兴大曲"> <label for="wine-quanxing">全兴大曲</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-shuijingfang" value="水井坊"> <label for="wine-shuijingfang">水井坊</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-langjiu" value="郎酒"> <label for="wine-langjiu">郎酒</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-maotai" value="茅台"> <label for="wine-maotai">茅台</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-tuopai" value="沱牌舍得"> <label for="wine-tuopai">沱牌舍得</label></div>
+                        <div class="option-item"><input type="checkbox" name="hotpot-wine" id="wine-other" value="其他"> <label for="wine-other">其他</label>
+                            <input type="text" name="hotpot-wine-other" placeholder="请填写其他白酒品牌" class="other-input">
+                        </div>
+                    </div>
+                    <small>小提示：火锅配白酒，是成都人的专属浪漫~</small>
+                </div>
+
+                <div class="question" id="drink-scene">
+                    <p>5. 您饮用白酒的主要场景（可多选）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-home-daily" value="家庭日常自饮"> <label for="scene-home-daily">家庭日常自饮</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-home-party" value="家庭聚餐"> <label for="scene-home-party">家庭聚餐（如年夜饭、周末聚餐）</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-friend-party" value="朋友聚会"> <label for="scene-friend-party">朋友聚会（如火锅串串局、KTV局）</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-business" value="商务宴请"> <label for="scene-business">商务宴请</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-gift" value="节日礼赠"> <label for="scene-gift">节日礼赠（如中秋、春节送礼）</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-banquet" value="婚宴/寿宴等宴席"> <label for="scene-banquet">婚宴/寿宴等宴席</label></div>
+                        <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-other" value="其他"> <label for="scene-other">其他</label>
+                            <input type="text" name="drink-scene-other" placeholder="请填写其他场景" class="other-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question" id="buy-channel">
+                    <p>6. 【情景题】 急着买白酒送礼，你会首选哪个渠道？（单选）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-smoke-shop" value="社区烟酒店"> <label for="channel-smoke-shop">社区烟酒店（就近方便）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-supermarket" value="大型商超烟酒区"> <label for="channel-supermarket">大型商超烟酒区（品质放心）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-chain-shop" value="连锁酒行"> <label for="channel-chain-shop">连锁酒行（如1919、酒仙网线下店，品类齐全）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-ecommerce" value="电商平台"> <label for="channel-ecommerce">电商平台（淘宝/京东/拼多多，价格划算）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-brand-shop" value="品牌专卖店"> <label for="channel-brand-shop">品牌专卖店（保真首选）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-convenience" value="便利店"> <label for="channel-convenience">便利店（如红旗连锁、舞东风，应急之选）</label></div>
+                        <div class="option-item"><input type="radio" name="buy-channel" id="channel-other" value="其他"> <label for="channel-other">其他</label>
+                            <input type="text" name="buy-channel-other" placeholder="请填写其他渠道" class="other-input">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 三、消费偏好与影响因素 -->
+            <section id="preference-factor">
+                <h2>三、消费偏好与影响因素（程度评分+可视化拖拽）</h2>
+                
+                <div class="question">
+                    <p>1. 您选择白酒时，各因素的重要程度（将原排序题改为程度评分，数据更易量化）：</p>
+                    <table class="rating-table">
+                        <thead>
+                            <tr>
+                                <th>影响因素</th>
+                                <th>非常不重要</th>
+                                <th>不太重要</th>
+                                <th>一般</th>
+                                <th>比较重要</th>
+                                <th>非常重要</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>品牌知名度</td>
+                                <td><input type="radio" name="factor-brand" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-brand" value="不太重要"></td>
+                                <td><input type="radio" name="factor-brand" value="一般"></td>
+                                <td><input type="radio" name="factor-brand" value="比较重要"></td>
+                                <td><input type="radio" name="factor-brand" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>口感风味</td>
+                                <td><input type="radio" name="factor-taste" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-taste" value="不太重要"></td>
+                                <td><input type="radio" name="factor-taste" value="一般"></td>
+                                <td><input type="radio" name="factor-taste" value="比较重要"></td>
+                                <td><input type="radio" name="factor-taste" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>价格性价比</td>
+                                <td><input type="radio" name="factor-price" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-price" value="不太重要"></td>
+                                <td><input type="radio" name="factor-price" value="一般"></td>
+                                <td><input type="radio" name="factor-price" value="比较重要"></td>
+                                <td><input type="radio" name="factor-price" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>包装设计</td>
+                                <td><input type="radio" name="factor-package" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-package" value="不太重要"></td>
+                                <td><input type="radio" name="factor-package" value="一般"></td>
+                                <td><input type="radio" name="factor-package" value="比较重要"></td>
+                                <td><input type="radio" name="factor-package" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>酒精度数</td>
+                                <td><input type="radio" name="factor-alcohol" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-alcohol" value="不太重要"></td>
+                                <td><input type="radio" name="factor-alcohol" value="一般"></td>
+                                <td><input type="radio" name="factor-alcohol" value="比较重要"></td>
+                                <td><input type="radio" name="factor-alcohol" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>亲友推荐</td>
+                                <td><input type="radio" name="factor-recommend" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-recommend" value="不太重要"></td>
+                                <td><input type="radio" name="factor-recommend" value="一般"></td>
+                                <td><input type="radio" name="factor-recommend" value="比较重要"></td>
+                                <td><input type="radio" name="factor-recommend" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>健康属性</td>
+                                <td><input type="radio" name="factor-health" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-health" value="不太重要"></td>
+                                <td><input type="radio" name="factor-health" value="一般"></td>
+                                <td><input type="radio" name="factor-health" value="比较重要"></td>
+                                <td><input type="radio" name="factor-health" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>文化情怀</td>
+                                <td><input type="radio" name="factor-culture" value="非常不重要" required></td>
+                                <td><input type="radio" name="factor-culture" value="不太重要"></td>
+                                <td><input type="radio" name="factor-culture" value="一般"></td>
+                                <td><input type="radio" name="factor-culture" value="比较重要"></td>
+                                <td><input type="radio" name="factor-culture" value="非常重要"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="question">
+                    <p>2. 【拖拽题】 把你最爱的白酒香型拖到最前面（支持电脑端拖拽，手机端按偏好排序填写序号1-5）：</p>
+                    <div class="options">
+                        <div class="option-item">浓香型 <input type="number" name="flavor-nong" min="1" max="5" placeholder="填写序号1-5"></div>
+                        <div class="option-item">酱香型 <input type="number" name="flavor-jiang" min="1" max="5" placeholder="填写序号1-5"></div>
+                        <div class="option-item">清香型 <input type="number" name="flavor-qing" min="1" max="5" placeholder="填写序号1-5"></div>
+                        <div class="option-item">兼香型 <input type="number" name="flavor-jian" min="1" max="5" placeholder="填写序号1-5"></div>
+                        <div class="option-item">其他香型 <input type="number" name="flavor-other" min="1" max="5" placeholder="填写序号1-5">
+                            <input type="text" name="flavor-other-name" placeholder="请填写其他香型名称" class="other-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>3. 您偏好的白酒度数：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-38-" value="38°及以下" required> <label for="degree-38-">38°及以下（低度柔和）</label></div>
+                        <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-39-45" value="39°-45°"> <label for="degree-39-45">39°-45°（中度适口）</label></div>
+                        <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-46-52" value="46°-52°"> <label for="degree-46-52">46°-52°（高度主流）</label></div>
+                        <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-53+" value="53°及以上"> <label for="degree-53+">53°及以上（高度醇厚）</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>4. 【趋势题】 你愿意为成都文创白酒买单吗？（程度评价）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="creative-willing" id="creative-very" value="非常愿意" required> <label for="creative-very">非常愿意（颜值即正义）</label></div>
+                        <div class="option-item"><input type="radio" name="creative-willing" id="creative-more" value="比较愿意"> <label for="creative-more">比较愿意（好奇想试试）</label></div>
+                        <div class="option-item"><input type="radio" name="creative-willing" id="creative-general" value="一般"> <label for="creative-general">一般（看价格和设计）</label></div>
+                        <div class="option-item"><input type="radio" name="creative-willing" id="creative-less" value="不太愿意"> <label for="creative-less">不太愿意（还是传统款靠谱）</label></div>
+                        <div class="option-item"><input type="radio" name="creative-willing" id="creative-never" value="非常不愿意"> <label for="creative-never">非常不愿意（不感兴趣）</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>5. 您尝试过以下创新型白酒产品吗？（可多选）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-low" value="低度白酒"> <label for="innov-low">低度白酒（≤38°）</label></div>
+                        <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-small" value="文创小瓶装白酒"> <label for="innov-small">文创小瓶装白酒（≤100ml）</label></div>
+                        <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-fruit" value="果味白酒"> <label for="innov-fruit">果味白酒（如青梅味、桑葚味）</label></div>
+                        <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-herb" value="草本添加型白酒"> <label for="innov-herb">草本添加型白酒（如玛咖酒、枸杞酒）</label></div>
+                        <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-never" value="从未尝试"> <label for="innov-never">从未尝试</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>6. 各类外部因素对您购买白酒的影响程度：</p>
+                    <table class="rating-table">
+                        <thead>
+                            <tr>
+                                <th>影响因素</th>
+                                <th>无影响</th>
+                                <th>影响较小</th>
+                                <th>一般</th>
+                                <th>影响较大</th>
+                                <th>影响极大</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>朋友/家人推荐</td>
+                                <td><input type="radio" name="external-friend" value="无影响" required></td>
+                                <td><input type="radio" name="external-friend" value="影响较小"></td>
+                                <td><input type="radio" name="external-friend" value="一般"></td>
+                                <td><input type="radio" name="external-friend" value="影响较大"></td>
+                                <td><input type="radio" name="external-friend" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>短视频/直播种草</td>
+                                <td><input type="radio" name="external-video" value="无影响" required></td>
+                                <td><input type="radio" name="external-video" value="影响较小"></td>
+                                <td><input type="radio" name="external-video" value="一般"></td>
+                                <td><input type="radio" name="external-video" value="影响较大"></td>
+                                <td><input type="radio" name="external-video" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>线下广告（公交/地铁/户外）</td>
+                                <td><input type="radio" name="external-ad" value="无影响" required></td>
+                                <td><input type="radio" name="external-ad" value="影响较小"></td>
+                                <td><input type="radio" name="external-ad" value="一般"></td>
+                                <td><input type="radio" name="external-ad" value="影响较大"></td>
+                                <td><input type="radio" name="external-ad" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>促销打折（如买一送一、满减）</td>
+                                <td><input type="radio" name="external-sale" value="无影响" required></td>
+                                <td><input type="radio" name="external-sale" value="影响较小"></td>
+                                <td><input type="radio" name="external-sale" value="一般"></td>
+                                <td><input type="radio" name="external-sale" value="影响较大"></td>
+                                <td><input type="radio" name="external-sale" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>节日氛围</td>
+                                <td><input type="radio" name="external-festival" value="无影响" required></td>
+                                <td><input type="radio" name="external-festival" value="影响较小"></td>
+                                <td><input type="radio" name="external-festival" value="一般"></td>
+                                <td><input type="radio" name="external-festival" value="影响较大"></td>
+                                <td><input type="radio" name="external-festival" value="影响极大"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 四、替代品认知与选择 -->
+            <section id="substitute-cognition">
+                <h2>四、替代品认知与选择（对比互动+原因深挖）</h2>
+                
+                <div class="question">
+                    <p>1. 您用其他酒类替代白酒的频率：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-often" value="经常替代" required> <label for="sub-freq-often">经常替代</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-sometimes" value="偶尔替代"> <label for="sub-freq-sometimes">偶尔替代</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-rarely" value="很少替代"> <label for="sub-freq-rarely">很少替代</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-never" value="从不替代"> <label for="sub-freq-never">从不替代</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>2. 【对比题】 白酒vs替代品，你更爱哪种？（选完可补充原因）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-beer" value="啤酒" required> <label for="sub-prefer-beer">啤酒</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-fruit" value="果酒"> <label for="sub-prefer-fruit">果酒</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-pre" value="预调酒"> <label for="sub-prefer-pre">预调酒</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-red" value="红酒"> <label for="sub-prefer-red">红酒</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-yellow" value="黄酒"> <label for="sub-prefer-yellow">黄酒</label></div>
+                        <div class="option-item"><input type="radio" name="substitute-prefer" id="sub-prefer-other" value="其他"> <label for="sub-prefer-other">其他</label>
+                            <input type="text" name="substitute-prefer-other" placeholder="请填写其他酒类" class="other-input">
+                        </div>
+                    </div>
+                    <textarea name="substitute-reason" placeholder="补充原因（选填）"></textarea>
+                </div>
+
+                <div class="question">
+                    <p>3. 您选择替代品的主要原因（可多选）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-low" value="度数低，不易醉"> <label for="sub-reason-low">度数低，不易醉</label></div>
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-taste" value="口感更清爽/香甜"> <label for="sub-reason-taste">口感更清爽/香甜</label></div>
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-health" value="健康负担小"> <label for="sub-reason-health">健康负担小</label></div>
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-social" value="更符合年轻社交氛围"> <label for="sub-reason-social">更符合年轻社交氛围</label></div>
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-price" value="价格更亲民"> <label for="sub-reason-price">价格更亲民</label></div>
+                        <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-other" value="其他"> <label for="sub-reason-other">其他</label>
+                            <input type="text" name="substitute-reason-other" placeholder="请填写其他原因" class="other-input">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 五、市场趋势认知 -->
+            <section id="market-trend">
+                <h2>五、市场趋势认知（本地洞察+观点表达）</h2>
+                
+                <div class="question">
+                    <p>1. 【本地趋势投票】 你认为近年来成都白酒消费市场变化最明显的是？（可多选）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="market-trend" id="trend-high" value="高端白酒更受欢迎"> <label for="trend-high">高端白酒更受欢迎</label></div>
+                        <div class="option-item"><input type="checkbox" name="market-trend" id="trend-young" value="年轻人喝白酒的越来越多（反常识趋势）"> <label for="trend-young">年轻人喝白酒的越来越多（反常识趋势）</label></div>
+                        <div class="option-item"><input type="checkbox" name="market-trend" id="trend-low" value="低度白酒选择变多"> <label for="trend-low">低度白酒选择变多</label></div>
+                        <div class="option-item"><input type="checkbox" name="market-trend" id="trend-creative" value="白酒文创产品成网红"> <label for="trend-creative">白酒文创产品成网红</label></div>
+                        <div class="option-item"><input type="checkbox" name="market-trend" id="trend-none" value="没感觉到明显变化"> <label for="trend-none">没感觉到明显变化</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>2. 您对白酒品牌年轻化营销的接受程度（如联名火锅、短视频挑战赛）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="young-marketing" id="young-very" value="非常接受，会主动关注" required> <label for="young-very">非常接受，会主动关注</label></div>
+                        <div class="option-item"><input type="radio" name="young-marketing" id="young-more" value="比较接受，看到会留意"> <label for="young-more">比较接受，看到会留意</label></div>
+                        <div class="option-item"><input type="radio" name="young-marketing" id="young-general" value="一般，无所谓"> <label for="young-general">一般，无所谓</label></div>
+                        <div class="option-item"><input type="radio" name="young-marketing" id="young-less" value="不太接受，觉得违和"> <label for="young-less">不太接受，觉得违和</label></div>
+                        <div class="option-item"><input type="radio" name="young-marketing" id="young-never" value="非常不接受"> <label for="young-never">非常不接受</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>3. 您为白酒文化附加值买单的意愿程度（如非遗酿造工艺、本地文化IP）：</p>
+                    <div class="options">
+                        <div class="option-item"><input type="radio" name="culture-value" id="culture-very" value="非常愿意" required> <label for="culture-very">非常愿意</label></div>
+                        <div class="option-item"><input type="radio" name="culture-value" id="culture-more" value="比较愿意"> <label for="culture-more">比较愿意</label></div>
+                        <div class="option-item"><input type="radio" name="culture-value" id="culture-price" value="看价格而定"> <label for="culture-price">看价格而定</label></div>
+                        <div class="option-item"><input type="radio" name="culture-value" id="culture-less" value="不太愿意"> <label for="culture-less">不太愿意</label></div>
+                        <div class="option-item"><input type="radio" name="culture-value" id="culture-never" value="完全不愿意"> <label for="culture-never">完全不愿意</label></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 六、非白酒消费者调研 -->
+            <section id="non-drinker" class="hidden">
+                <h2>六、非白酒消费者调研（痛点深挖+潜力探索）</h2>
+                
+                <div class="question">
+                    <p>1. 您不饮用白酒的原因影响程度：</p>
+                    <table class="rating-table">
+                        <thead>
+                            <tr>
+                                <th>原因</th>
+                                <th>无影响</th>
+                                <th>影响较小</th>
+                                <th>一般</th>
+                                <th>影响较大</th>
+                                <th>影响极大</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>口感辛辣刺激，接受不了</td>
+                                <td><input type="radio" name="non-reason-taste" value="无影响" required></td>
+                                <td><input type="radio" name="non-reason-taste" value="影响较小"></td>
+                                <td><input type="radio" name="non-reason-taste" value="一般"></td>
+                                <td><input type="radio" name="non-reason-taste" value="影响较大"></td>
+                                <td><input type="radio" name="non-reason-taste" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>度数太高，担心伤身</td>
+                                <td><input type="radio" name="non-reason-degree" value="无影响" required></td>
+                                <td><input type="radio" name="non-reason-degree" value="影响较小"></td>
+                                <td><input type="radio" name="non-reason-degree" value="一般"></td>
+                                <td><input type="radio" name="non-reason-degree" value="影响较大"></td>
+                                <td><input type="radio" name="non-reason-degree" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>不喜欢传统酒桌文化</td>
+                                <td><input type="radio" name="non-reason-culture" value="无影响" required></td>
+                                <td><input type="radio" name="non-reason-culture" value="影响较小"></td>
+                                <td><input type="radio" name="non-reason-culture" value="一般"></td>
+                                <td><input type="radio" name="non-reason-culture" value="影响较大"></td>
+                                <td><input type="radio" name="non-reason-culture" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>没有饮用习惯</td>
+                                <td><input type="radio" name="non-reason-habit" value="无影响" required></td>
+                                <td><input type="radio" name="non-reason-habit" value="影响较小"></td>
+                                <td><input type="radio" name="non-reason-habit" value="一般"></td>
+                                <td><input type="radio" name="non-reason-habit" value="影响较大"></td>
+                                <td><input type="radio" name="non-reason-habit" value="影响极大"></td>
+                            </tr>
+                            <tr>
+                                <td>其他酒类更符合偏好</td>
+                                <td><input type="radio" name="non-reason-other" value="无影响" required></td>
+                                <td><input type="radio" name="non-reason-other" value="影响较小"></td>
+                                <td><input type="radio" name="non-reason-other" value="一般"></td>
+                                <td><input type="radio" name="non-reason-other" value="影响较大"></td>
+                                <td><input type="radio" name="non-reason-other" value="影响极大"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="question">
+                    <p>2. 【潜力题】 哪种创新白酒能让你“破例一试”？（可多选）</p>
+                    <div class="options">
+                        <div class="option-item"><input type="checkbox" name="non-try" id="non-try-low" value="低度清香型白酒（口感柔和）"> <label for="non-try-low">低度清香型白酒（口感柔和）</label></div>
+                        <div class="option-item"><input type="checkbox" name="non-try" id="non-try-creative" value="文创小瓶装白酒（颜值高、量小不浪费）"> <label for="non-try-creative">文创小瓶装白酒（颜值高、量小不浪费）</label></div>
+                        <div class="option-item"><input type="checkbox" name="non-try" id="non-try-fruit" value="果味白酒（酸甜适口）"> <label for="non-try-fruit">果味白酒（酸甜适口）</label></div>
+                        <div class="option-item"><input type="checkbox" name="non-try" id="non-try-herb" value="草本养生白酒（健康属性）"> <label for="non-try-herb">草本养生白酒（健康属性）</label></div>
+                        <div class="option-item"><input type="checkbox" name="non-try" id="non-try-never" value="无论哪种都不会尝试"> <label for="non-try-never">无论哪种都不会尝试</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <p>3. 白酒品牌吸引您尝试的改进措施重要程度：</p>
+                    <table class="rating-table">
+                        <thead>
+                            <tr>
+                                <th>改进措施</th>
+                                <th>非常不重要</th>
+                                <th>不太重要</th>
+                                <th>一般</th>
+                                <th>比较重要</th>
+                                <th>非常重要</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>降低度数</td>
+                                <td><input type="radio" name="improve-degree" value="非常不重要" required></td>
+                                <td><input type="radio" name="improve-degree" value="不太重要"></td>
+                                <td><input type="radio" name="improve-degree" value="一般"></td>
+                                <td><input type="radio" name="improve-degree" value="比较重要"></td>
+                                <td><input type="radio" name="improve-degree" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>改良口感</td>
+                                <td><input type="radio" name="improve-taste" value="非常不重要" required></td>
+                                <td><input type="radio" name="improve-taste" value="不太重要"></td>
+                                <td><input type="radio" name="improve-taste" value="一般"></td>
+                                <td><input type="radio" name="improve-taste" value="比较重要"></td>
+                                <td><input type="radio" name="improve-taste" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>创新包装</td>
+                                <td><input type="radio" name="improve-package" value="非常不重要" required></td>
+                                <td><input type="radio" name="improve-package" value="不太重要"></td>
+                                <td><input type="radio" name="improve-package" value="一般"></td>
+                                <td><input type="radio" name="improve-package" value="比较重要"></td>
+                                <td><input type="radio" name="improve-package" value="非常重要"></td>
+                            </tr>
+                            <tr>
+                                <td>改变营销方式</td>
+                                <td><input type="radio" name="improve-marketing" value="非常不重要" required></td>
+                                <td><input type="radio" name="improve-marketing" value="不太重要"></td>
+                                <td><input type="radio" name="improve-marketing" value="一般"></td>
+                                <td><input type="radio" name="improve-marketing" value="比较重要"></td>
+                                <td><input type="radio" name="improve-marketing" value="非常重要"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 七、开放性问题 -->
+            <section id="open-questions">
+                <h2>七、开放性问题（聚焦本地+观点征集）</h2>
+                
+                <div class="question">
+                    <p>1. 结合成都的消费场景（如火锅聚餐、节日礼赠、文旅打卡），您认为全兴大曲、水井坊等本地白酒品牌在产品设计或营销上有哪些改进方向？</p>
+                    <textarea name="open-1" placeholder="请输入您的观点（选填）"></textarea>
+                </div>
+
+                <div class="question">
+                    <p>2. 从消费者视角出发，您认为未来白酒行业在年轻化、健康化、本地化方向上应如何平衡发展？</p>
+                    <textarea name="open-2" placeholder="请输入您的观点（选填）"></textarea>
+                </div>
+
+                <div class="question">
+                    <p>3. 针对成都的文旅消费趋势（如宽窄巷子、锦里打卡），您是否认为白酒品牌可以与本地文旅资源结合？若有，您期待哪些形式的合作？</p>
+                    <textarea name="open-3" placeholder="请输入您的观点（选填）"></textarea>
+                </div>
+            </section>
+
+            <!-- 提交按钮与状态提示 -->
+            <div id="submit-status"></div>
+            <button type="button" class="btn" id="submit-btn">提交问卷</button>
+            <button type="button" class="btn" id="generate-portrait" style="display:none;">生成消费画像</button>
+        </form>
+
+        <!-- 彩蛋画像结果 -->
+        <div id="portrait-result"></div>
+    </div>
+
+    <script>
+        // 1. 饮用频率选择逻辑：从不饮用跳转至第六部分
+        const drinkFrequencyRadios = document.querySelectorAll('input[name="drink-frequency"]');
+        const nonDrinkerSection = document.getElementById('non-drinker');
+        const normalSections = [
+            document.getElementById('consumption-behavior'),
+            document.getElementById('preference-factor'),
+            document.getElementById('substitute-cognition'),
+            document.getElementById('market-trend')
+        ];
+
+        drinkFrequencyRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === '从不饮用（选此项跳转至第六部分）') {
+                    // 隐藏常规章节，显示非饮用者章节
+                    normalSections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    nonDrinkerSection.classList.remove('hidden');
+                } else {
+                    // 显示常规章节，隐藏非饮用者章节
+                    normalSections.forEach(section => {
+                        section.classList.remove('hidden');
+                    });
+                    nonDrinkerSection.classList.add('hidden');
+                }
+            });
+        });
+
+        // 2. 收集表单数据
+        function collectFormData() {
+            const formData = {};
+            const form = document.getElementById('questionnaire-form');
+            const inputs = form.querySelectorAll('input, textarea');
+
+            inputs.forEach(input => {
+                if (input.name) {
+                    // 单选框/复选框处理
+                    if (input.type === 'radio' && input.checked) {
+                        formData[input.name] = input.value;
+                    } else if (input.type === 'checkbox' && input.checked) {
+                        if (!formData[input.name]) {
+                            formData[input.name] = [];
+                        }
+                        formData[input.name].push(input.value);
+                    } else if (input.type !== 'radio' && input.type !== 'checkbox') {
+                        // 文本/数字输入框
+                        formData[input.name] = input.value.trim();
+                    }
+                }
+            });
+
+            // 补充时间戳
+            formData.submitTime = new Date().toLocaleString('zh-CN');
+            return formData;
+        }
+
+        // 3. 生成消费画像逻辑
+        function generateConsumptionPortrait(data) {
+            let portrait = '';
+            // 基础标签
+            const ageLabelMap = {
+                '18-25岁': '社交尝鲜派',
+                '26-35岁': '商务聚会主力军',
+                '36-45岁': '礼赠宴请核心层',
+                '46-55岁': '自饮品鉴爱好者',
+                '55岁以上': '传统品牌忠实粉'
+            };
+            const ageLabel = ageLabelMap[data.age] || '白酒消费爱好者';
+
+            // 消费场景/价格/香型
+            const priceDescMap = {
+                '50元及以下': '亲民口粮酒',
+                '51-100元': '日常小酌款',
+                '101-200元': '朋友聚会档',
+                '201-300元': '家庭聚餐级',
+                '301-500元': '宴请体面选',
+                '501-1000元': '高端礼赠款',
+                '1000元以上': '收藏品鉴级'
+            };
+            const priceDesc = priceDescMap[data['price-range']] || '高性价比白酒';
+            
+            // 香型处理
+            let flavorDesc = '浓香型';
+            if (data['flavor-nong'] && data['flavor-nong'] === '1') flavorDesc = '浓香型';
+            if (data['flavor-jiang'] && data['flavor-jiang'] === '1') flavorDesc = '酱香型';
+            if (data['flavor-qing'] && data['flavor-qing'] === '1') flavorDesc = '清香型';
+
+            // 购买渠道
+            const channelDesc = data['buy-channel'] || '品牌专卖店';
+
+            // 文创白酒意愿
+            const creativeWilling = data['creative-willing'] || '愿意';
+            const creativeDesc = creativeWilling.includes('愿意') ? '愿意为文创白酒买单' : '更偏爱传统款白酒';
+
+            // 组合画像
+            if (data['drink-frequency'] === '从不饮用（选此项跳转至第六部分）') {
+                portrait = `你是「白酒未尝试派」，${ageLabel}，因${data['non-reason-taste'] || '口感'}等原因暂未饮用白酒，${data['non-try']?.includes('无论哪种都不会尝试') ? '暂无意尝试创新白酒' : '对低度/果味创新白酒有尝试意愿'}`;
+            } else {
+                portrait = `你是「火锅局${ageLabel}」，偏爱${data['price-range'] || '200元左右'}的${flavorDesc}白酒，购买首选${channelDesc}，${creativeDesc}~`;
+            }
+
+            return portrait;
+        }
+
+                // 4. 提交问卷至Webhook
+        const submitBtn = document.getElementById('submit-btn');
+        const generatePortraitBtn = document.getElementById('generate-portrait');
+        const submitStatus = document.getElementById('submit-status');
+        const portraitResult = document.getElementById('portrait-result');
+
+        // 替换为你的Webhook地址（如钉钉/企业微信/自定义后端接口）
+        const WEBHOOK_URL = 'https://your-webhook-url.com/receive';
+
+        submitBtn.addEventListener('click', async function () {
+            try {
+                // ========== 修正：按顺序检测可见的必填项，只提醒第一个未填项 ==========
+                const requiredInputs = Array.from(document.querySelectorAll('input[required]'));
+                let firstUnfilledInput = null; // 存储第一个未填写的输入项
+                let unfilledQuestionText = ''; // 存储未填写题目的文本
+
+                for (const input of requiredInputs) {
+                    // 跳过不可见的输入（例如被父 section 添加 .hidden 导致 display:none）
+                    // offsetParent 为 null 是常用的可见性检测：display:none 或不在文档流时为 null
+                    if (!input.offsetParent) continue;
+
+                    // 也额外跳过任何位于带 .hidden 的祖先 section 的输入（更保险）
+                    const sec = input.closest('section');
+                    if (sec && sec.classList.contains('hidden')) continue;
+
+                    // 目前问卷的必填项为单选（radio），按组名检查是否有选中项
+                    if (input.type === 'radio') {
+                        const isChecked = document.querySelector(`input[name="${input.name}"]:checked`);
+                        if (!isChecked) {
+                            firstUnfilledInput = input;
+                            const q = input.closest('.question')?.querySelector('p');
+                            unfilledQuestionText = q ? q.textContent.trim() : '此题';
+                            break; // 找到第一个未填立即停止
+                        }
+                    }
+                    // 若未来有其它类型的 required（如单个文本框），可以在此处补充判断逻辑
+                }
+
+                // 如果有未填写的项，提示并终止后续逻辑
+                if (firstUnfilledInput) {
+                    alert(`请完成「${unfilledQuestionText}」的填写`);
+                    firstUnfilledInput.closest('.question').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return; // 终止提交流程
+                }
+                // ========== 验证逻辑修正结束 ==========
+
+                // 收集数据
+                const formData = collectFormData();
+
+                // 提交至Webhook
+                submitStatus.textContent = '正在提交问卷...';
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    submitStatus.textContent = '问卷提交成功！';
+                    submitStatus.style.color = '#28a745';
+                    submitBtn.style.display = 'none';
+                    generatePortraitBtn.style.display = 'block';
+                } else {
+                    throw new Error('提交失败，请重试');
+                }
+            } catch (error) {
+                submitStatus.textContent = `提交失败：${error.message}`;
+                submitStatus.style.color = '#dc3545';
+                console.error('提交错误：', error);
+            }
+        });
+
+
+        // // 4. 提交问卷至Webhook
+        // const submitBtn = document.getElementById('submit-btn');
+        // const generatePortraitBtn = document.getElementById('generate-portrait');
+        // const submitStatus = document.getElementById('submit-status');
+        // const portraitResult = document.getElementById('portrait-result');
+
+        // // 替换为你的Webhook地址（如钉钉/企业微信/自定义后端接口）
+        // const WEBHOOK_URL = 'https://your-webhook-url.com/receive';
+
+        // submitBtn.addEventListener('click', async function() {
+        //     try {
+        //         // 验证必填项
+        //         const requiredInputs = document.querySelectorAll('input[required]');
+        //         let isFormValid = true;
+        //         requiredInputs.forEach(input => {
+        //             if (input.type === 'radio' && !document.querySelector(`input[name="${input.name}"]:checked`)) {
+        //                 isFormValid = false;
+        //                 alert(`请完成「${input.closest('.question').querySelector('p').textContent}」的填写`);
+        //             }
+        //         });
+        //         if (!isFormValid) return;
+
+        //         // 收集数据
+        //         const formData = collectFormData();
+                
+        //         // 提交至Webhook
+        //         submitStatus.textContent = '正在提交问卷...';
+        //         const response = await fetch(WEBHOOK_URL, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify(formData),
+        //         });
+
+        //         if (response.ok) {
+        //             submitStatus.textContent = '问卷提交成功！';
+        //             submitStatus.style.color = '#28a745';
+        //             submitBtn.style.display = 'none';
+        //             generatePortraitBtn.style.display = 'block';
+        //         } else {
+        //             throw new Error('提交失败，请重试');
+        //         }
+        //     } catch (error) {
+        //         submitStatus.textContent = `提交失败：${error.message}`;
+        //         submitStatus.style.color = '#dc3545';
+        //         console.error('提交错误：', error);
+        //     }
+        // });
+
+        // 5. 生成画像
+        generatePortraitBtn.addEventListener('click', function() {
+            const formData = collectFormData();
+            const portrait = generateConsumptionPortrait(formData);
+            portraitResult.style.display = 'block';
+            portraitResult.textContent = portrait;
+        });
+    </script>
+</body>
+</html>
