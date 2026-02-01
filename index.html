@@ -14,11 +14,19 @@
         }
 
         body {
-            background-color: #f5f5f5;
+            background-image: url('background.png');
+            background-size: cover;                         /* 覆盖整个区域 */
+            background-position: center center;             /* 居中对齐 */
+            background-repeat: no-repeat;                   /* 不重复 */
+            background-attachment: fixed;                   /* 固定背景 */
             padding: 20px;
             line-height: 1.6;
             color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;/* 最小高度为视窗高度 */
         }
+
+
 
         .container {
             max-width: 800px;
@@ -27,6 +35,15 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 6px solid #8B0000;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         header h1 {
@@ -507,16 +524,167 @@
             font-size: 0.9rem;
             color: #666;
         }
+        /* 滚动指示器样式 */
+    /* 滚动指示器样式 */
+       .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;  /* 添加这一行，确保内容在交叉轴上居中 */
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.6s ease-out;
+            text-align: center;
+        }
+
+
+        /* 当页面滚动超过50px时隐藏指示器 */
+        .page-scrolled .scroll-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .arrow-up {
+            width: 24px;  /* 明确指定宽度 */
+            height: 20px; /* 明确指定高度 */
+            position: relative;
+            margin-bottom: 8px;
+            animation: bounce 2s infinite;
+        }
+
+        .arrow-up::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 20px solid #8B0000;
+        }
+
+
+
+        .scroll-text {
+            color: #8B0000;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            margin: 0;
+            padding: 0;
+            line-height: 1.2;
+            width: auto;  /* 修改这一行，不固定宽度 */
+            min-width: 120px;  /* 设置最小宽度确保文本有足够的显示空间 */
+            box-sizing: border-box;
+            flex-shrink: 0;  /* 防止元素收缩 */
+        }
+
+
+        /* 箭头弹跳动画 */
+       @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);  /* 确保最终位置正确 */
+            }
+            40% {
+                transform: translateY(-10px) translateX(-50%);  /* 动画过程中也保持水平居中 */
+            }
+            60% {
+                transform: translateY(-5px) translateX(-50%);   /* 动画过程中也保持水平居中 */
+            }
+        }
+
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                bottom: 30px;
+            }
+
+            .arrow-up {
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 16px solid #8B0000;
+            }
+
+            .scroll-text {
+                font-size: 12px;
+            }
+        }
+        /* 修改为正确的选择器 */
+/* 修改后的CSS，确保正确应用样式 */
+.loading-title {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 99;  /* 降低z-index，确保container显示在上面 */
+    opacity: 1;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    font-family: "KaiTi", "STKaiti", "Brush Script MT", "Microsoft Yahei", serif;
+    pointer-events: none;  /* 防止遮挡下方元素 */
+}
+
+/* 当container变为可见时，隐藏loading-title */
+.container.visible ~ .loading-title {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-title h1 {
+    font-size: 2.5rem;
+    color: #8B0000;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: "KaiTi", "STKaiti", "Brush Script MT", "Microsoft Yahei", serif;
+}
+
+.loading-title p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
     </style>
 </head>
 
 <body>
+    <div class="scroll-indicator">
+        <h1>成都白酒消费市场调研问卷</h1>
+        <p>正在为您准备个性化测试...</p>
+    </div>
+    <div class="scroll-indicator">
+        <div class="arrow-up"></div>
+        <div class="scroll-text">上滑开启测试</div>
+    </div>
+    <!-- 在 scroll-indicator 后，container 前添加 -->
+<!--<div class="loading-title">
+    <h1>成都白酒消费市场调研问卷</h1>
+    <p>正在为您准备个性化测试...</p>
+</div>-->
+
+    <br><br><br>
     <div class="container">
         <!-- 问卷头部 -->
-        <header>
-            <h1>成都白酒消费市场调研问卷（创新优化版）</h1>
-            <div class="intro">
-                <p>您好！我们是XX学校的学生，正在开展成都白酒消费市场调研。问卷数据仅用于学术研究，严格保密个人信息，预计占用您3-5分钟时间。完成问卷后可自动生成你的「成都白酒消费偏好画像」，感谢您的配合！</p>
+        <header class="intro">
+            <h1>
+                🍶 酒友速来！
+                只需 3 分钟，回答几个问题
+                即可生成你的——
+                👉 《白酒消费偏好画像》
+            </h1>
+            <div>
+                <p>
+                    没有对错，都是你的真实选择！
+                    最后会解锁一个「只有你懂的酒友标签」
+                </p>
             </div>
         </header>
 
@@ -524,31 +692,37 @@
         <form id="questionnaire-form">
             <!-- 一、基本信息 -->
             <section id="basic-info">
-                <h2>一、基本信息（科学分组+趣味标签）</h2>
-
+                <h2>第一关｜你的酒友底色</h2>
+                <div class="intro">
+                    <p>
+                        每个人喝酒的方式都不一样
+                        我们先从一些轻松的小问题开始
+                        找找你的“酒友底色”
+                    </p>
+                </div>
                 <div class="question">
-                    <p>1. 您的性别：</p>
+                    <p>先来个简单的，你是？</p>
                     <div class="options">
-                        <div class="option-item"><input type="radio" name="gender" id="gender-male" value="男" required> <label for="gender-male">男</label></div>
-                        <div class="option-item"><input type="radio" name="gender" id="gender-female" value="女"> <label for="gender-female">女</label></div>
+                        <div class="option-item"><input type="radio" name="gender" id="gender-male" value="男" required> <label for="gender-male">男生</label></div>
+                        <div class="option-item"><input type="radio" name="gender" id="gender-female" value="女"> <label for="gender-female">女生</label></div>
                     </div>
-                    <small>划分依据：性别是影响白酒消费频率、香型偏好的核心人口统计学变量...</small>
+                    <!--<small>划分依据：性别是影响白酒消费频率、香型偏好的核心人口统计学变量...</small>-->
                 </div>
 
                 <div class="question">
-                    <p>2. 您的年龄段（选完自动匹配消费标签）：</p>
+                    <p>你大概属于哪一代酒友？</p>
                     <div class="options">
-                        <div class="option-item"><input type="radio" name="age" id="age-18-25" value="18-25岁" required> <label for="age-18-25">18-25岁（学生/初入职场，社交尝鲜派）</label></div>
-                        <div class="option-item"><input type="radio" name="age" id="age-26-35" value="26-35岁"> <label for="age-26-35">26-35岁（职场中坚，商务聚会主力军）</label></div>
-                        <div class="option-item"><input type="radio" name="age" id="age-36-45" value="36-45岁"> <label for="age-36-45">36-45岁（成熟职场，礼赠宴请核心层）</label></div>
-                        <div class="option-item"><input type="radio" name="age" id="age-46-55" value="46-55岁"> <label for="age-46-55">46-55岁（中年稳定期，自饮品鉴爱好者）</label></div>
-                        <div class="option-item"><input type="radio" name="age" id="age-55+" value="55岁以上"> <label for="age-55+">55岁以上（退休/半退休，传统品牌忠实粉）</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-18-25" value="18-25岁" required> <label for="age-18-25">18-25岁</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-26-35" value="26-35岁"> <label for="age-26-35">26-35岁</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-36-45" value="36-45岁"> <label for="age-36-45">36-45岁</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-46-55" value="46-55岁"> <label for="age-46-55">46-55岁</label></div>
+                        <div class="option-item"><input type="radio" name="age" id="age-55+" value="55岁以上"> <label for="age-55+">55岁以上</label></div>
                     </div>
-                    <small>划分依据：参照白酒行业消费群体细分标准...</small>
+                    <!--<small>划分依据：参照白酒行业消费群体细分标准...</small>-->
                 </div>
 
                 <div class="question">
-                    <p>3. 您的月收入/生活费区间：</p>
+                    <p>现在的你，属于哪种“收入状态”？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="income" id="income-2000-" value="2000元及以下" required> <label for="income-2000-">2000元及以下</label></div>
                         <div class="option-item"><input type="radio" name="income" id="income-2001-4000" value="2001-4000元"> <label for="income-2001-4000">2001-4000元</label></div>
@@ -557,11 +731,11 @@
                         <div class="option-item"><input type="radio" name="income" id="income-10001-15000" value="10001-15000元"> <label for="income-10001-15000">10001-15000元</label></div>
                         <div class="option-item"><input type="radio" name="income" id="income-15000+" value="15000元以上"> <label for="income-15000+">15000元以上</label></div>
                     </div>
-                    <small>划分依据：收入水平直接决定白酒消费的价格区间与购买频次...</small>
+                    <!--<small>划分依据：收入水平直接决定白酒消费的价格区间与购买频次...</small>-->
                 </div>
 
                 <div class="question">
-                    <p>4. 您的职业类型：</p>
+                    <p>你现在的主要身份是？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="occupation" id="occ-student" value="在校学生" required> <label for="occ-student">在校学生</label></div>
                         <div class="option-item"><input type="radio" name="occupation" id="occ-staff" value="企业普通职员"> <label for="occ-staff">企业普通职员</label></div>
@@ -574,16 +748,22 @@
                             <input type="text" name="occupation-other" placeholder="请填写具体职业" class="other-input">
                         </div>
                     </div>
-                    <small>划分依据：职业关联消费场景（如企业管理人员高频商务宴请）...</small>
+                    <!--<small>划分依据：职业关联消费场景（如企业管理人员高频商务宴请）...</small>-->
                 </div>
             </section>
 
             <!-- 二、白酒消费行为 -->
             <section id="consumption-behavior">
-                <h2>二、白酒消费行为（程度分级+场景联想）</h2>
-
+                <h2>第二关｜你和白酒，到底熟不熟？</h2>
+                <div class="intro">
+                    <p>
+                        有的人天天见
+                        有的人只在节日打个照面
+                        下面的问题，会决定你是不是“核心酒友”
+                    </p>
+                </div>
                 <div class="question">
-                    <p>1. 您饮用白酒的频率（合并原“是否饮用”，用程度直接区分群体）：</p>
+                    <p>你和白酒见面的频率大概是？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="drink-frequency" id="freq-daily" value="几乎每天" required> <label for="freq-daily">几乎每天</label></div>
                         <div class="option-item"><input type="radio" name="drink-frequency" id="freq-3-5" value="每周3-5次"> <label for="freq-3-5">每周3-5次</label></div>
@@ -596,7 +776,7 @@
                 </div>
 
                 <div class="question" id="drink-amount">
-                    <p>2. 您单次饮用白酒的量（附直观参照）：</p>
+                    <p>一次喝多少，才算你的“正常发挥”？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="drink-amount" id="amount-50-" value="50ml及以下"> <label for="amount-50-">50ml及以下（约1两，小酒杯1杯）</label></div>
                         <div class="option-item"><input type="radio" name="drink-amount" id="amount-51-100" value="51-100ml"> <label for="amount-51-100">51-100ml（1-2两，小酒杯2杯）</label></div>
@@ -606,7 +786,7 @@
                 </div>
 
                 <div class="question" id="price-range">
-                    <p>3. 您常购买的白酒单价区间（对应消费定位）：</p>
+                    <p>如果是你自己掏钱，最常买的白酒价位是？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="price-range" id="price-50-" value="50元及以下"> <label for="price-50-">50元及以下（亲民口粮酒）</label></div>
                         <div class="option-item"><input type="radio" name="price-range" id="price-51-100" value="51-100元"> <label for="price-51-100">51-100元（日常小酌款）</label></div>
@@ -619,12 +799,15 @@
                 </div>
 
                 <div class="question" id="hotpot-wine">
-                    <p>4. 【互动题】 成都火锅局必带白酒投票（图片选择，可多选，图片链接自行替换）：</p>
+                    <p>
+                        🔥 火锅局灵魂拷问
+                        朋友喊你出来吃火锅，你最可能拎哪瓶酒？
+                    </p>
                     <div class="options">
                         <div class="image-options" id="hotpot-image-options">
                             <label class="image-option" title="五粮液">
                                 <input type="checkbox" name="hotpot-wine" value="五粮液" id="wine-wuliangye">
-                                <img src="https://supercoolking173.github.io/baijiu-surve/五粮液.jpg" alt="五粮液">
+                                <img src="五粮液.jpg" alt="五粮液">
                                 <div class="caption">五粮液</div>
                             </label>
 
@@ -683,7 +866,7 @@
                 </div>
 
                 <div class="question" id="drink-scene">
-                    <p>5. 您饮用白酒的主要场景（可多选）：</p>
+                    <p>一般在什么情况下，你会想到喝白酒？</p>
                     <div class="options">
                         <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-home-daily" value="家庭日常自饮"> <label for="scene-home-daily">家庭日常自饮</label></div>
                         <div class="option-item"><input type="checkbox" name="drink-scene" id="scene-home-party" value="家庭聚餐"> <label for="scene-home-party">家庭聚餐（如年夜饭、周末聚餐）</label></div>
@@ -699,12 +882,9 @@
                 </div>
 
                 <div class="question" id="buy-channel">
-                    <p>6. 【情景题】 急着买白酒送礼，你会首选哪个渠道？（单选）</p>
+                    <p>想象一下这个场景👇</p>
                     <!-- 情景示意图（请把 src 替换为你的图片路径） -->
-                    <div class="scenario-image">
-                        <img src="吃席.png" alt="情景示意图">
-                        <div class="scenario-caption" style="text-align:left;">你正准备向领导送一份白酒礼品，以表达工作感谢和尊重。今晚与领导共进晚餐，席间领导会偶尔谈起加薪与晋升事宜，你希望留下好印象。</div>
-                    </div>
+                    <div id="scenario-container" class="scenario-image" aria-live="polite"></div>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="buy-channel" id="channel-smoke-shop" value="社区烟酒店"> <label for="channel-smoke-shop">社区烟酒店（就近方便）</label></div>
                         <div class="option-item"><input type="radio" name="buy-channel" id="channel-supermarket" value="大型商超烟酒区"> <label for="channel-supermarket">大型商超烟酒区（品质放心）</label></div>
@@ -722,15 +902,17 @@
 
             <!-- 三、消费偏好与影响因素 -->
             <section id="preference-factor">
-                <h2>三、消费偏好与影响因素（程度评分+可视化拖拽）</h2>
+                <h2>第三关｜你是怎么选酒的？</h2>
 
                 <div class="question">
-                    <p>1. 您选择白酒时，各因素的重要程度（将原排序题改为程度评分，数据更易量化）：</p>
+                    <p>
+                        当你选白酒时，下面这些因素对你有多重要？    
+                    </p>
                     <!-- 替换：将原来的 rating-table 表格替换为下列滑动条布局 -->
                     <div class="rating-grid" id="preference-rating-grid">
                         <!-- 提示行（保留原来的五档说明） -->
                         <div style="font-size:0.95rem; color:#555; margin-bottom:6px;">
-                            说明：将滑动条向右拖动表示该因素越重要（1=⭐，5=⭐⭐⭐⭐⭐）。
+                            👉 拖动滑块，越往右越重要（1=⭐，5=⭐⭐⭐⭐⭐）。
                         </div>
 
                         <div class="rating-row">
@@ -824,7 +1006,10 @@
                 </div>
 
                 <div class="question">
-                    <p>2. 【拖拽题】 把你最爱的白酒香型拖到下方容器（电脑拖拽，手机端点击选择）：</p>
+                    <p>
+                        如果只能选一个最爱的香型
+                        你会把谁放在第一位？
+                    </p>
                     <div class="options">
                         <div class="draggable-options" id="flavor-options" aria-label="香型选项">
                             <div class="draggable-item" draggable="true" data-value="浓香型" id="flavor-nong">
@@ -858,7 +1043,10 @@
                 </div>
 
                 <div class="question">
-                    <p>3. 您偏好的白酒度数：</p>
+                    <p>
+                        你平时更喜欢哪种“酒精强度”？
+                        （放心，我们只想知道你的口味，非评判）
+                    </p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-38-" value="38°及以下" required> <label for="degree-38-">38°及以下（低度柔和）</label></div>
                         <div class="option-item"><input type="radio" name="alcohol-degree" id="degree-39-45" value="39°-45°"> <label for="degree-39-45">39°-45°（中度适口）</label></div>
@@ -868,7 +1056,10 @@
                 </div>
 
                 <div class="question">
-                    <p>4. 【趋势题】 你愿意为成都文创白酒买单吗？（程度评价）</p>
+                    <p>
+                        如果出现颜值高、创意满满的成都文创白酒
+                        你会下单尝试吗？
+                    </p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="creative-willing" id="creative-very" value="非常愿意" required> <label for="creative-very">非常愿意（颜值即正义）</label></div>
                         <div class="option-item"><input type="radio" name="creative-willing" id="creative-more" value="比较愿意"> <label for="creative-more">比较愿意（好奇想试试）</label></div>
@@ -879,7 +1070,10 @@
                 </div>
 
                 <div class="question">
-                    <p>5. 您尝试过以下创新型白酒产品吗？（可多选）</p>
+                    <p>
+                        哪些创新白酒你已经体验过了？
+                        （多选，越真实，你的画像越准确）
+                    </p>
                     <div class="options">
                         <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-low" value="低度白酒"> <label for="innov-low">低度白酒（≤38°）</label></div>
                         <div class="option-item"><input type="checkbox" name="innovative-wine" id="innov-small" value="文创小瓶装白酒"> <label for="innov-small">文创小瓶装白酒（≤100ml）</label></div>
@@ -890,7 +1084,7 @@
                 </div>
 
                 <div class="question">
-                    <p>6. 各类外部因素对您购买白酒的影响程度：</p>
+                    <p>平时在选酒时，以下外部因素对你的选择影响有多大？</p>
                     <table class="rating-table">
                         <thead>
                             <tr>
@@ -950,10 +1144,10 @@
 
             <!-- 四、替代品认知与选择 -->
             <section id="substitute-cognition">
-                <h2>四、替代品认知与选择（对比互动+原因深挖）</h2>
+                <h2>第四关｜替代品对比</h2>
 
                 <div class="question">
-                    <p>1. 您用其他酒类替代白酒的频率：</p>
+                    <p>你平时会用其他酒类替代白酒吗？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-often" value="经常替代" required> <label for="sub-freq-often">经常替代</label></div>
                         <div class="option-item"><input type="radio" name="substitute-frequency" id="sub-freq-sometimes" value="偶尔替代"> <label for="sub-freq-sometimes">偶尔替代</label></div>
@@ -964,11 +1158,11 @@
 
                 <!-- 替换：原来的 单个 name="substitute-prefer" 对比题，改为 5 个二选单题 -->
                 <div class="question">
-                    <p>2. 【对比题】 白酒 vs 替代酒类（每题二选一，请选择你更爱哪种）</p>
+                    <p>快速二选一！看看你是白酒忠实粉，还是替代酒派</p>
                     <div class="options">
                         <!-- 2.1 白酒 vs 啤酒 -->
                         <div class="option-block" style="margin:6px 0;">
-                            <p style="font-weight:600; margin-bottom:6px;">2.1 白酒 vs 啤酒：你更爱哪种？</p>
+                            <p style="font-weight:600; margin-bottom:6px;">白酒 vs 啤酒：你更爱哪种？</p>
                             <div class="options">
                                 <div class="option-item">
                                     <input type="radio" name="compare-beer" id="compare-beer-beer" value="啤酒" required>
@@ -983,7 +1177,7 @@
 
                         <!-- 2.2 白酒 vs 果酒 -->
                         <div class="option-block" style="margin:6px 0;">
-                            <p style="font-weight:600; margin-bottom:6px;">2.2 白酒 vs 果酒：你更爱哪种？</p>
+                            <p style="font-weight:600; margin-bottom:6px;">白酒 vs 果酒：你更爱哪种？</p>
                             <div class="options">
                                 <div class="option-item">
                                     <input type="radio" name="compare-fruit" id="compare-fruit-fruit" value="果酒" required>
@@ -998,7 +1192,7 @@
 
                         <!-- 2.3 白酒 vs 预调酒 -->
                         <div class="option-block" style="margin:6px 0;">
-                            <p style="font-weight:600; margin-bottom:6px;">2.3 白酒 vs 预调酒：你更爱哪种？</p>
+                            <p style="font-weight:600; margin-bottom:6px;">白酒 vs 预调酒：你更爱哪种？</p>
                             <div class="options">
                                 <div class="option-item">
                                     <input type="radio" name="compare-pre" id="compare-pre-pre" value="预调酒" required>
@@ -1013,7 +1207,7 @@
 
                         <!-- 2.4 白酒 vs 红酒 -->
                         <div class="option-block" style="margin:6px 0;">
-                            <p style="font-weight:600; margin-bottom:6px;">2.4 白酒 vs 红酒：你更爱哪种？</p>
+                            <p style="font-weight:600; margin-bottom:6px;">白酒 vs 红酒：你更爱哪种？</p>
                             <div class="options">
                                 <div class="option-item">
                                     <input type="radio" name="compare-red" id="compare-red-red" value="红酒" required>
@@ -1028,7 +1222,7 @@
 
                         <!-- 2.5 白酒 vs 黄酒 -->
                         <div class="option-block" style="margin:6px 0;">
-                            <p style="font-weight:600; margin-bottom:6px;">2.5 白酒 vs 黄酒：你更爱哪种？</p>
+                            <p style="font-weight:600; margin-bottom:6px;">白酒 vs 黄酒：你更爱哪种？</p>
                             <div class="options">
                                 <div class="option-item">
                                     <input type="radio" name="compare-yellow" id="compare-yellow-yellow" value="黄酒" required>
@@ -1047,7 +1241,7 @@
                 </div>
 
                 <div class="question">
-                    <p>3. 您选择替代品的主要原因（可多选）：</p>
+                    <p>为什么有时会选替代酒？（可多选）</p>
                     <div class="options">
                         <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-low" value="度数低，不易醉"> <label for="sub-reason-low">度数低，不易醉</label></div>
                         <div class="option-item"><input type="checkbox" name="substitute-reason-check" id="sub-reason-taste" value="口感更清爽/香甜"> <label for="sub-reason-taste">口感更清爽/香甜</label></div>
@@ -1064,10 +1258,10 @@
 
             <!-- 五、市场趋势认知 -->
             <section id="market-trend">
-                <h2>五、市场趋势认知（本地洞察+观点表达）</h2>
+                <h2>第五关｜市场趋势感知</h2>
 
                 <div class="question">
-                    <p>1. 【本地趋势投票】 你认为近年来成都白酒消费市场变化最明显的是？（可多选）</p>
+                    <p>最近几年成都白酒圈发生了什么变化？</p>
                     <div class="options">
                         <div class="option-item"><input type="checkbox" name="market-trend" id="trend-high" value="高端白酒更受欢迎"> <label for="trend-high">高端白酒更受欢迎</label></div>
                         <div class="option-item"><input type="checkbox" name="market-trend" id="trend-young" value="年轻人喝白酒的越来越多（反常识趋势）"> <label for="trend-young">年轻人喝白酒的越来越多（反常识趋势）</label></div>
@@ -1078,7 +1272,7 @@
                 </div>
 
                 <div class="question">
-                    <p>2. 您对白酒品牌年轻化营销的接受程度（如联名火锅、短视频挑战赛）：</p>
+                    <p>白酒品牌年轻化营销的接受程度</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="young-marketing" id="young-very" value="非常接受，会主动关注" required> <label for="young-very">非常接受，会主动关注</label></div>
                         <div class="option-item"><input type="radio" name="young-marketing" id="young-more" value="比较接受，看到会留意"> <label for="young-more">比较接受，看到会留意</label></div>
@@ -1089,7 +1283,7 @@
                 </div>
 
                 <div class="question">
-                    <p>3. 您为白酒文化附加值买单的意愿程度（如非遗酿造工艺、本地文化IP）：</p>
+                    <p>为白酒文化附加值买单的意愿</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="culture-value" id="culture-very" value="非常愿意" required> <label for="culture-very">非常愿意</label></div>
                         <div class="option-item"><input type="radio" name="culture-value" id="culture-more" value="比较愿意"> <label for="culture-more">比较愿意</label></div>
@@ -1102,10 +1296,11 @@
 
             <!-- 六、非白酒消费者调研 -->
             <section id="non-drinker" class="hidden">
-                <h2>六、非白酒消费者调研（痛点深挖+潜力探索）</h2>
-
+                <h2>第六关｜非白酒党解锁你的潜力</h2>
+               
+               
                 <div class="question">
-                    <p>1. 您不饮用白酒的原因影响程度：</p>
+                    <p>告诉我们，你为什么选择绕开白酒？</p>
                     <table class="rating-table">
                         <thead>
                             <tr>
@@ -1163,7 +1358,10 @@
                 </div>
 
                 <div class="question">
-                    <p>2. 【潜力题】 哪种创新白酒能让你“破例一试”？（可多选）</p>
+                    <p>
+                        即使你平时不喝白酒，也可能会被某种新品吸引！
+                        快选出你愿意尝试的类型，
+                    </p>
                     <div class="options">
                         <div class="option-item"><input type="checkbox" name="non-try" id="non-try-low" value="低度清香型白酒（口感柔和）"> <label for="non-try-low">低度清香型白酒（口感柔和）</label></div>
                         <div class="option-item"><input type="checkbox" name="non-try" id="non-try-creative" value="文创小瓶装白酒（颜值高、量小不浪费）"> <label for="non-try-creative">文创小瓶装白酒（颜值高、量小不浪费）</label></div>
@@ -1174,7 +1372,7 @@
                 </div>
 
                 <div class="question">
-                    <p>3. 白酒品牌吸引您尝试的改进措施重要程度：</p>
+                    <p>假如品牌想打动你，你希望他们怎么改？</p>
                     <table class="rating-table">
                         <thead>
                             <tr>
@@ -1226,28 +1424,32 @@
 
             <!-- 七、开放性问题 -->
             <section id="open-questions">
-                <h2>七、开放性问题（聚焦本地+观点征集）</h2>
-
+                <h2>第七关｜开放性问题</h2>
+                <div class="intro">
+                    <p>
+                        最后一关！写下你的观点，越真实，画像越精准
+                    </p>
+                </div>
                 <div class="question">
-                    <p>1. 结合成都的消费场景（如火锅聚餐、节日礼赠、文旅打卡），您认为全兴大曲、水井坊等本地白酒品牌在产品设计或营销上有哪些改进方向？</p>
+                    <p>你认为本地品牌（全兴大曲、水井坊）有哪些创新方向？</p>
                     <textarea name="open-1" placeholder="请输入您的观点（选填）"></textarea>
                 </div>
 
                 <div class="question">
-                    <p>2. 从消费者视角出发，您认为未来白酒行业在年轻化、健康化、本地化方向上应如何平衡发展？</p>
+                    <p>未来白酒在年轻化、健康化、本地化上应该怎么平衡？</p>
                     <textarea name="open-2" placeholder="请输入您的观点（选填）"></textarea>
                 </div>
 
                 <div class="question">
-                    <p>3. 针对成都的文旅消费趋势（如宽窄巷子、锦里打卡），您是否认为白酒品牌可以与本地文旅资源结合？若有，您期待哪些形式的合作？</p>
+                    <p>你希望白酒品牌和文旅资源怎样结合？</p>
                     <textarea name="open-3" placeholder="请输入您的观点（选填）"></textarea>
                 </div>
             </section>
 
             <!-- 提交按钮与状态提示 -->
             <div id="submit-status"></div>
-            <button type="button" class="btn" id="submit-btn">提交问卷</button>
-            <button type="button" class="btn" id="generate-portrait" style="display:none;">生成消费画像</button>
+            <button type="button" class="btn" id="submit-btn">提交</button>
+            <button type="button" class="btn" id="generate-portrait" style="display:none;">🎯 开始生成我的酒友画像</button>
         </form>
 
         <!-- 彩蛋画像结果 -->
@@ -1256,256 +1458,220 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // 映射文本
-            const LEVEL_MAP = {
-                1: '⭐',
-                2: '⭐⭐',
-                3: '⭐⭐⭐',
-                4: '⭐⭐⭐⭐',
-                5: '⭐⭐⭐⭐⭐'
+            // 页面打开时开始计时（隐藏，不展示在页面）
+            let pageStartTime = Date.now();
+            let timerStopped = false;
+
+            // 年龄对应画像图片映射 —— 请把路径替换为你的实际图片路径（相对或绝对）
+            const AGE_IMAGE_MAP = {
+                '18-25岁': '社交尝鲜派.png',    // 例如: 'images/age-18-25.png'
+                '26-35岁': '商务聚会主力军.png',    // 例如: 'images/age-26-35.png'
+                '36-45岁': '礼赠宴请核心层.png',    // 例如: 'images/age-36-45.png'
+                '46-55岁': '自饮品鉴爱好者.png',    // 例如: 'images/age-46-55.png'
+                '55岁以上': '传统品牌忠实粉.png'    // 例如: 'images/age-55plus.png'
             };
 
-            // --- 确保 compare 组有 required（防止少量浏览器/编辑遗漏） ---
+            const LEVEL_MAP = { 1: '⭐', 2: '⭐⭐', 3: '⭐⭐⭐', 4: '⭐⭐⭐⭐', 5: '⭐⭐⭐⭐⭐' };
+
             (function ensureCompareGroupsRequired() {
                 const compareNames = ['compare-beer', 'compare-fruit', 'compare-pre', 'compare-red', 'compare-yellow'];
                 compareNames.forEach(name => {
                     const radios = document.getElementsByName(name);
                     if (radios && radios.length > 0) {
-                        // 如果没有任何一项被标记 required，则把第一个设为 required
                         const anyRequired = Array.from(radios).some(r => r.required);
                         if (!anyRequired) radios[0].required = true;
                     }
                 });
             })();
 
-            // ========== 饮用频率切换（保留） ==========
-            const drinkFrequencyRadios = document.querySelectorAll('input[name="drink-frequency"]');
-            const nonDrinkerSection = document.getElementById('non-drinker');
-            const normalSections = [
-                document.getElementById('consumption-behavior'),
-                document.getElementById('preference-factor'),
-                document.getElementById('substitute-cognition'),
-                document.getElementById('market-trend')
-            ];
-            drinkFrequencyRadios.forEach(radio => {
-                radio.addEventListener('change', function () {
-                    if (this.value === '从不饮用（选此项跳转至第六部分）') {
-                        normalSections.forEach(section => section.classList.add('hidden'));
-                        nonDrinkerSection.classList.remove('hidden');
-                    } else {
-                        normalSections.forEach(section => section.classList.remove('hidden'));
-                        nonDrinkerSection.classList.add('hidden');
-                    }
-                });
+            // 滚动检测与容器显示效果
+    // 滚动检测与容器显示效果
+            const container = document.querySelector('.container');
+
+            // 监听滚动事件
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    container.classList.add('visible');
+                    document.body.classList.add('page-scrolled'); // 添加这个类来隐藏指示器
+                } else {
+                    container.classList.remove('visible');
+                    document.body.classList.remove('page-scrolled'); // 移除这个类来显示指示器
+                }
             });
 
-            // ========== range 初始化显示 ==========
-            function updateRangeDisplay(rangeEl) {
-                const name = rangeEl.name;
-                const v = parseInt(rangeEl.value, 10) || 1;
-                const valEl = document.querySelector(`.range-value[data-for="${name}"]`);
-                const labelEl = document.querySelector(`.range-label[data-for="${name}"]`);
-                if (valEl) valEl.textContent = v;
-                if (labelEl) labelEl.textContent = LEVEL_MAP[v] || '';
-                const min = parseInt(rangeEl.min || '1', 10);
-                const max = parseInt(rangeEl.max || '5', 10);
-                const percent = ((v - min) / (max - min)) * 100;
-                rangeEl.style.background = `linear-gradient(90deg, #8B0000 ${percent}%, #e9e9e9 ${percent}%)`;
-            }
-            const rangeInputs = document.querySelectorAll('#preference-rating-grid input[type="range"]');
-            rangeInputs.forEach(r => {
-                updateRangeDisplay(r);
-                r.addEventListener('input', () => updateRangeDisplay(r));
-                r.addEventListener('change', () => updateRangeDisplay(r));
-            });
-
-            // ========== 拖拽题逻辑（支持拖入、拖出、点击/触摸） ==========
-            (function setupFlavorDragDrop() {
-                const flavorOptions = document.getElementById('flavor-options');
-                const dropZone = document.getElementById('favorite-flavor-zone');
-                const dropContent = document.getElementById('drop-content');
-                const hiddenInput = document.getElementById('favorite-flavor-input');
-
-                if (!flavorOptions || !dropZone || !dropContent || !hiddenInput) return;
-
-                let draggedEl = null;
-
-                function setHidden(val) {
-                    hiddenInput.value = val || '';
-                }
-
-                function moveToDrop(el) {
-                    if (!el) return;
-                    // 若 drop 中已有不同项，先放回选项区（互斥）
-                    if (dropContent.firstElementChild && dropContent.firstElementChild !== el) {
-                        flavorOptions.appendChild(dropContent.firstElementChild);
-                    }
-                    dropContent.appendChild(el);
-                    setHidden(el.dataset.value || '');
-                }
-
-                function moveBack(el) {
-                    if (!el) return;
-                    flavorOptions.appendChild(el);
-                    setHidden('');
-                }
-
-                // Drag handlers (同一套用于选项区与 drop 区移动)
-                function onDragStart(e) {
-                    draggedEl = e.currentTarget;
-                    e.dataTransfer.effectAllowed = 'move';
-                    try { e.dataTransfer.setData('text/plain', draggedEl.dataset.value); } catch (err) { }
-                    draggedEl.classList.add('dragging');
-                    // 隐藏源元素以便视觉上看到拖动
-                    setTimeout(() => draggedEl.style.visibility = 'hidden', 0);
-                }
-                function onDragEnd() {
-                    if (!draggedEl) return;
-                    // restore visibility
-                    draggedEl.style.visibility = '';
-                    draggedEl.classList.remove('dragging');
-                    draggedEl = null;
-                }
-
-                // dropZone handlers
-                function onDragOverZone(e) {
-                    e.preventDefault();
-                    dropZone.classList.add('over');
-                    e.dataTransfer.dropEffect = 'move';
-                }
-                function onDragLeaveZone() {
-                    dropZone.classList.remove('over');
-                }
-                function onDropZone(e) {
-                    e.preventDefault();
-                    dropZone.classList.remove('over');
-                    let el = draggedEl;
-                    if (!el) {
-                        const val = e.dataTransfer.getData('text/plain');
-                        el = Array.from(flavorOptions.children).find(c => c.dataset.value === val) ||
-                            Array.from(dropContent.children).find(c => c.dataset.value === val);
-                    }
-                    if (el) moveToDrop(el);
-                }
-
-                // flavorOptions handlers (允许把已放入的项拖回这里)
-                function onDragOverOptions(e) {
-                    e.preventDefault();
-                    flavorOptions.classList.add('over-options');
-                    e.dataTransfer.dropEffect = 'move';
-                }
-                function onDragLeaveOptions() {
-                    flavorOptions.classList.remove('over-options');
-                }
-                function onDropOptions(e) {
-                    e.preventDefault();
-                    flavorOptions.classList.remove('over-options');
-                    let el = draggedEl;
-                    if (!el) {
-                        const val = e.dataTransfer.getData('text/plain');
-                        el = Array.from(dropContent.children).find(c => c.dataset.value === val) ||
-                            Array.from(flavorOptions.children).find(c => c.dataset.value === val);
-                    }
-                    if (el) moveBack(el);
-                }
-
-                // 点击 / 键盘 切换（移动端点击也走这里）
-                function onItemToggle(e) {
-                    const el = e.currentTarget;
-                    if (el.parentElement === dropContent) {
-                        moveBack(el);
-                    } else {
-                        moveToDrop(el);
-                    }
-                }
-
-                // 触摸处理：区分滑动与点击
-                function attachTouchHandlers(item) {
-                    let touchMoved = false;
-                    let startX = 0, startY = 0;
-                    item.addEventListener('touchstart', function (ev) {
-                        touchMoved = false;
-                        const t = ev.touches && ev.touches[0];
-                        if (t) { startX = t.clientX; startY = t.clientY; }
-                    }, { passive: true });
-                    item.addEventListener('touchmove', function (ev) {
-                        const t = ev.touches && ev.touches[0];
-                        if (!t) return;
-                        const dx = Math.abs(t.clientX - startX);
-                        const dy = Math.abs(t.clientY - startY);
-                        if (dx > 10 || dy > 10) touchMoved = true;
-                    }, { passive: true });
-                    item.addEventListener('touchend', function (ev) {
-                        if (!touchMoved) {
-                            ev.preventDefault();
-                            onItemToggle({ currentTarget: item });
-                        }
-                    });
-                }
-
-                // 初始化所有选项（无论在选项区还是 drop 区，事件随节点移动保留）
-                function initItem(item) {
-                    item.setAttribute('draggable', 'true');
-                    item.addEventListener('dragstart', onDragStart);
-                    item.addEventListener('dragend', onDragEnd);
-                    item.setAttribute('tabindex', '0');
-                    item.addEventListener('click', onItemToggle);
-                    item.addEventListener('keydown', function (ev) {
-                        if (ev.key === 'Enter' || ev.key === ' ') {
-                            ev.preventDefault();
-                            onItemToggle({ currentTarget: item });
-                        }
-                    });
-                    attachTouchHandlers(item);
-                }
-
-                Array.from(flavorOptions.querySelectorAll('.draggable-item')).forEach(initItem);
-
-                // 绑定 drop 目标：dropZone 与 flavorOptions（允许拖入/拖出）
-                dropZone.addEventListener('dragover', onDragOverZone);
-                dropZone.addEventListener('dragleave', onDragLeaveZone);
-                dropZone.addEventListener('drop', onDropZone);
-
-                flavorOptions.addEventListener('dragover', onDragOverOptions);
-                flavorOptions.addEventListener('dragleave', onDragLeaveOptions);
-                flavorOptions.addEventListener('drop', onDropOptions);
-
-                // 初次加载时若 dropContent 有子元素，初始化 hidden
-                if (dropContent.firstElementChild) {
-                    setHidden(dropContent.firstElementChild.dataset.value || '');
-                }
-            })();
-
-            // ========== collectFormData ==========
-            function collectFormData() {
-                const formData = {};
-                const form = document.getElementById('questionnaire-form');
-                const inputs = form.querySelectorAll('input, textarea');
-
-                inputs.forEach(input => {
-                    if (!input.name) return;
-
-                    if (input.type === 'radio') {
-                        if (input.checked) formData[input.name] = input.value;
-                    } else if (input.type === 'checkbox') {
-                        if (input.checked) {
-                            if (!formData[input.name]) formData[input.name] = [];
-                            formData[input.name].push(input.value);
-                        }
-                    } else if (input.type === 'range') {
-                        formData[input.name] = input.value;
-                    } else {
-                        formData[input.name] = input.value.trim();
-                    }
-                });
-
-                formData.submitTime = new Date().toLocaleString('zh-CN');
-                return formData;
+            // 页面加载时检查当前位置
+            if (window.scrollY > 50) {
+                container.classList.add('visible');
+                document.body.classList.add('page-scrolled');
+            } else {
+                document.body.classList.remove('page-scrolled');
             }
 
-            // ========== 生成画像（保留并把 favorite-flavor 纳入） ==========
+
+    // 饮用频率切换
+    const drinkFrequencyRadios = document.querySelectorAll('input[name="drink-frequency"]');
+    const nonDrinkerSection = document.getElementById('non-drinker');
+    const normalSections = [
+        document.getElementById('consumption-behavior'),
+        document.getElementById('preference-factor'),
+        document.getElementById('substitute-cognition'),
+        document.getElementById('market-trend')
+    ];
+    drinkFrequencyRadios.forEach(radio=>{
+        radio.addEventListener('change', function () {
+            if (this.value === '从不饮用（选此项跳转至第六部分）') {
+                normalSections.forEach(s=>s.classList.add('hidden'));
+                nonDrinkerSection.classList.remove('hidden');
+            } else {
+                normalSections.forEach(s=>s.classList.remove('hidden'));
+                nonDrinkerSection.classList.add('hidden');
+            }
+        });
+    });
+
+    // range 初始化与显示
+    function updateRangeDisplay(rangeEl) {
+        const name = rangeEl.name;
+        const v = parseInt(rangeEl.value,10) || 1;
+        const valEl = document.querySelector(`.range-value[data-for="${name}"]`);
+        const labelEl = document.querySelector(`.range-label[data-for="${name}"]`);
+        if (valEl) valEl.textContent = v;
+        if (labelEl) labelEl.textContent = LEVEL_MAP[v] || '';
+        const min = parseInt(rangeEl.min||'1',10);
+        const max = parseInt(rangeEl.max||'5',10);
+        const percent = ((v-min)/(max-min))*100;
+        rangeEl.style.background = `linear-gradient(90deg, #8B0000 ${percent}%, #e9e9e9 ${percent}%)`;
+    }
+    const rangeInputs = document.querySelectorAll('#preference-rating-grid input[type="range"]');
+    rangeInputs.forEach(r=>{
+        updateRangeDisplay(r);
+        r.addEventListener('input', ()=>updateRangeDisplay(r));
+        r.addEventListener('change', ()=>updateRangeDisplay(r));
+    });
+
+    // 拖拽题逻辑（含触摸与点击）
+    (function setupFlavorDragDrop(){
+        const flavorOptions = document.getElementById('flavor-options');
+        const dropZone = document.getElementById('favorite-flavor-zone');
+        const dropContent = document.getElementById('drop-content');
+        const hiddenInput = document.getElementById('favorite-flavor-input');
+        if (!flavorOptions || !dropZone || !dropContent || !hiddenInput) return;
+
+        let draggedEl = null;
+        function setHidden(val){ hiddenInput.value = val || ''; }
+
+        function moveToDrop(el){
+            if (!el) return;
+            if (dropContent.firstElementChild && dropContent.firstElementChild !== el) {
+                flavorOptions.appendChild(dropContent.firstElementChild);
+            }
+            dropContent.appendChild(el);
+            setHidden(el.dataset.value || '');
+        }
+        function moveBack(el){
+            if (!el) return;
+            flavorOptions.appendChild(el);
+            setHidden('');
+        }
+
+        function onDragStart(e){
+            draggedEl = e.currentTarget;
+            try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', draggedEl.dataset.value); } catch (err){}
+            draggedEl.classList.add('dragging');
+            setTimeout(()=>draggedEl.style.visibility = 'hidden', 0);
+        }
+        function onDragEnd(){
+            if (!draggedEl) return;
+            draggedEl.style.visibility = '';
+            draggedEl.classList.remove('dragging');
+            draggedEl = null;
+        }
+        function onDragOverZone(e){ e.preventDefault(); dropZone.classList.add('over'); try{ e.dataTransfer.dropEffect = 'move'; }catch{} }
+        function onDragLeaveZone(){ dropZone.classList.remove('over'); }
+        function onDropZone(e){
+            e.preventDefault(); dropZone.classList.remove('over');
+            let el = draggedEl;
+            if (!el) {
+                const val = e.dataTransfer.getData('text/plain');
+                el = Array.from(flavorOptions.children).find(c=>c.dataset.value===val) || Array.from(dropContent.children).find(c=>c.dataset.value===val);
+            }
+            if (el) moveToDrop(el);
+        }
+
+        function onDragOverOptions(e){ e.preventDefault(); flavorOptions.classList.add('over-options'); try{ e.dataTransfer.dropEffect='move'; }catch{} }
+        function onDragLeaveOptions(){ flavorOptions.classList.remove('over-options'); }
+        function onDropOptions(e){
+            e.preventDefault(); flavorOptions.classList.remove('over-options');
+            let el = draggedEl;
+            if (!el) {
+                const val = e.dataTransfer.getData('text/plain');
+                el = Array.from(dropContent.children).find(c=>c.dataset.value===val) || Array.from(flavorOptions.children).find(c=>c.dataset.value===val);
+            }
+            if (el) moveBack(el);
+        }
+
+        function onItemToggle(e){
+            const el = e.currentTarget;
+            if (el.parentElement === dropContent) moveBack(el); else moveToDrop(el);
+        }
+
+        function attachTouchHandlers(item){
+            let touchMoved=false, startX=0, startY=0;
+            item.addEventListener('touchstart', function(ev){ touchMoved=false; const t = ev.touches && ev.touches[0]; if (t){ startX=t.clientX; startY=t.clientY; } }, {passive:true});
+            item.addEventListener('touchmove', function(ev){ const t = ev.touches && ev.touches[0]; if (!t) return; const dx=Math.abs(t.clientX-startX), dy=Math.abs(t.clientY-startY); if (dx>10||dy>10) touchMoved=true; }, {passive:true});
+            item.addEventListener('touchend', function(ev){ if (!touchMoved){ ev.preventDefault(); onItemToggle({ currentTarget: item }); } });
+        }
+
+        function initItem(item){
+            item.setAttribute('draggable','true');
+            item.addEventListener('dragstart', onDragStart);
+            item.addEventListener('dragend', onDragEnd);
+            item.setAttribute('tabindex','0');
+            item.addEventListener('click', onItemToggle);
+            item.addEventListener('keydown', function(ev){ if (ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); onItemToggle({ currentTarget:item }); } });
+            attachTouchHandlers(item);
+        }
+
+        Array.from(flavorOptions.querySelectorAll('.draggable-item')).forEach(initItem);
+
+        dropZone.addEventListener('dragover', onDragOverZone);
+        dropZone.addEventListener('dragleave', onDragLeaveZone);
+        dropZone.addEventListener('drop', onDropZone);
+
+        flavorOptions.addEventListener('dragover', onDragOverOptions);
+        flavorOptions.addEventListener('dragleave', onDragLeaveOptions);
+        flavorOptions.addEventListener('drop', onDropOptions);
+
+        // 如果页面初始时有已选项，设置隐藏字段
+        if (dropContent.firstElementChild) setHidden(dropContent.firstElementChild.dataset.value || '');
+    })();
+
+    // 表单数据收集
+    function collectFormData(){
+        const formData = {};
+        const form = document.getElementById('questionnaire-form');
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input=>{
+            if (!input.name) return;
+            if (input.type === 'radio') {
+                if (input.checked) formData[input.name] = input.value;
+            } else if (input.type === 'checkbox') {
+                if (input.checked) {
+                    if (!formData[input.name]) formData[input.name] = [];
+                    formData[input.name].push(input.value);
+                }
+            } else if (input.type === 'range') {
+                formData[input.name] = input.value;
+            } else {
+                formData[input.name] = input.value.trim();
+            }
+        });
+        formData.submitTime = new Date().toLocaleString('zh-CN');
+        return formData;
+    }
+
+    // 画像生成：返回对象 { text, imagePath }，imagePath 由 AGE_IMAGE_MAP 控制
             function generateConsumptionPortrait(data) {
-                let portrait = '';
                 const ageLabelMap = {
                     '18-25岁': '社交尝鲜派',
                     '26-35岁': '商务聚会主力军',
@@ -1525,36 +1691,70 @@
                     '1000元以上': '收藏品鉴级'
                 };
                 const priceDesc = priceDescMap[data['price-range']] || '高性价比白酒';
-
                 const favFlavor = data['favorite-flavor'] || '';
-                let flavorDesc = favFlavor || '浓香型';
-
+                const flavorDesc = favFlavor || '浓香型';
                 const channelDesc = data['buy-channel'] || '品牌专卖店';
                 const creativeWilling = data['creative-willing'] || '愿意';
                 const creativeDesc = creativeWilling.includes('愿意') ? '愿意为文创白酒买单' : '更偏爱传统款白酒';
 
+                let text = '';
                 if (data['drink-frequency'] === '从不饮用（选此项跳转至第六部分）') {
-                    portrait = `你是「白酒未尝试派」，${ageLabel}，因${data['non-reason-taste'] || '口感'}等原因暂未饮用白酒，${Array.isArray(data['non-try']) && data['non-try'].includes('无论哪种都不会尝试') ? '暂无意尝试创新白酒' : '对低度/果味创新白酒有尝试意愿'}`;
+                    text = `你是「白酒未尝试派」，${ageLabel}，因${data['non-reason-taste'] || '口感'}等原因暂未饮用白酒，${Array.isArray(data['non-try']) && data['non-try'].includes('无论哪种都不会尝试') ? '暂无意尝试创新白酒' : '对低度/果味创新白酒有尝试意愿'}`;
                 } else {
-                    portrait = `你是「火锅局${ageLabel}」，偏爱${priceDesc}的${flavorDesc}白酒，购买首选${channelDesc}，${creativeDesc}~`;
+                    text = `你是「火锅局${ageLabel}」，偏爱${priceDesc}的${flavorDesc}白酒，购买首选${channelDesc}，${creativeDesc}~`;
                 }
 
-                return portrait;
+                // 仅用于页面本地展示，不应加入提交 payload
+                const imagePath = AGE_IMAGE_MAP[data.age] || '';
+
+                return { text, imagePath };
             }
 
-            // ========== 提交与校验 ==========
+    // 支持多个后端：顺序尝试，遇到第一个响应 2xx 则停止
+    const WEBHOOK_URLS = [
+        'https://irrotationally-metalline-stasia.ngrok-free.dev/receive',
+        // 'https://备用接口一.example.com/receive',
+        // 'https://备用接口二.example.com/receive'，
+        // 'https://备用接口一.example.com/receive',
+        // 'https://备用接口二.example.com/receive'
+    ];
+
+    async function postSequential(urls, data, options = {}) {
+        const timeoutMs = options.timeoutMs || 8000;
+        for (const url of urls) {
+            try {
+                const controller = new AbortController();
+                const id = setTimeout(()=>controller.abort(), timeoutMs);
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+                if (resp && resp.ok) return { ok: true, url, response: resp };
+                console.warn(`POST ${url} 返回状态 ${resp.status}`);
+            } catch (err) {
+                console.warn(`POST ${url} 失败：`, err && err.message ? err.message : err);
+            }
+        }
+        return { ok: false };
+    }
+
+            // ========== 提交处理（关键：图片只展示，不上报） ==========
             const submitBtn = document.getElementById('submit-btn');
-            const generatePortraitBtn = document.getElementById('generate-portrait');
             const submitStatus = document.getElementById('submit-status');
             const portraitResult = document.getElementById('portrait-result');
-            const WEBHOOK_URL = 'https://irrotationally-metalline-stasia.ngrok-free.dev/receive';
 
             submitBtn.addEventListener('click', async function () {
                 try {
+                    if (submitBtn.disabled) return;
+                    submitBtn.disabled = true;
+
+                    // 验证 required
                     const requiredInputs = Array.from(document.querySelectorAll('input[required]'));
                     let firstUnfilled = null;
                     let unfilledQuestionText = '';
-
                     for (const input of requiredInputs) {
                         if (!input.offsetParent) continue;
                         const sec = input.closest('section');
@@ -1562,17 +1762,17 @@
 
                         if (input.type === 'radio') {
                             const checked = document.querySelector(`input[name="${input.name}"]:checked`);
-                            if (!checked) { firstUnfilled = input; }
+                            if (!checked) firstUnfilled = input;
                         } else if (input.type === 'range') {
                             const v = input.value;
-                            if (v === null || v === '' || isNaN(parseInt(v, 10))) { firstUnfilled = input; }
+                            if (v === null || v === '' || isNaN(parseInt(v, 10))) firstUnfilled = input;
                         } else if (input.type === 'checkbox') {
                             if (input.required) {
                                 const any = document.querySelector(`input[name="${input.name}"]:checked`);
-                                if (!any) { firstUnfilled = input; }
+                                if (!any) firstUnfilled = input;
                             }
                         } else {
-                            if (input.value == null || input.value.toString().trim() === '') { firstUnfilled = input; }
+                            if (input.value == null || input.value.toString().trim() === '') firstUnfilled = input;
                         }
 
                         if (firstUnfilled) {
@@ -1580,47 +1780,143 @@
                             break;
                         }
                     }
-
                     if (firstUnfilled) {
                         alert(`请完成「${unfilledQuestionText}」的填写`);
                         firstUnfilled.closest('.question').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        submitBtn.disabled = false;
                         return;
                     }
 
-                    const formData = collectFormData();
-                    submitStatus.textContent = '正在提交问卷...';
-                    const response = await fetch(WEBHOOK_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
-                    });
+                    // 计时结束并附加时长信息（仅作为表单数据）
+                    const pageEndTime = Date.now();
+                    const elapsedMs = (pageStartTime && !timerStopped) ? (pageEndTime - pageStartTime) : 0;
+                    timerStopped = true;
 
-                    if (response.ok) {
-                        submitStatus.textContent = '问卷提交成功！';
+                    const formData = collectFormData();
+                    formData._timing = {
+                        startISO: new Date(pageStartTime).toISOString(),
+                        endISO: new Date(pageEndTime).toISOString(),
+                        elapsedMs: elapsedMs,
+                        elapsedSeconds: Math.round(elapsedMs / 1000)
+                    };
+
+                    // 生成画像对象（文本 + 本地图片路径），注意：imagePath 仅用于本地展示
+                    const portraitObj = generateConsumptionPortrait(formData);
+
+                    // 准备要上报的 payload：确保不包含任何 imagePath 字段
+                    const payload = JSON.parse(JSON.stringify(formData)); // 深拷贝
+                    // 强制删除可能的图片字段，确保不会上传
+                    delete payload.imagePath;
+                    delete payload._image;
+                    delete payload.ageImage;
+                    // （如果将来有其它图片字段，也可在此删除）
+
+                    submitStatus.textContent = '正在提交问卷...'; submitStatus.style.color = '#8B0000';
+
+                    // 上报（payload 中已没有图片路径）
+                    const result = await postSequential(WEBHOOK_URLS, payload, { timeoutMs: 8000 });
+
+                    if (result.ok) {
+                        submitStatus.textContent = `问卷提交成功（由 ${result.url} 响应）！画像已为你生成：`;
                         submitStatus.style.color = '#28a745';
                         submitBtn.style.display = 'none';
-                        generatePortraitBtn.style.display = 'block';
                     } else {
-                        throw new Error('提交失败，请重试');
+                        submitStatus.textContent = '提交失败（未成功上报）。已在本地生成画像：';
+                        submitStatus.style.color = '#dc3545';
+                        // 允许重试（保留按钮）
+                        submitBtn.disabled = false;
                     }
+
+                    // 本地展示画像：图片仅用于页面展示，不加入任何上报内容
+                    portraitResult.innerHTML = '';
+                    portraitResult.style.display = 'block';
+                    if (portraitObj.imagePath) {
+                        const img = document.createElement('img');
+                        img.src = portraitObj.imagePath;
+                        img.alt = formData.age ? `${formData.age} 画像` : '用户画像';
+                        img.style.maxWidth = '160px';
+                        img.style.height = 'auto';
+                        img.style.display = 'block';
+                        img.style.margin = '0 auto 10px';
+                        img.loading = 'lazy';
+                        portraitResult.appendChild(img);
+                    }
+                    const txt = document.createElement('div');
+                    txt.textContent = portraitObj.text;
+                    portraitResult.appendChild(txt);
+
                 } catch (err) {
-                    submitStatus.textContent = `提交失败：${err.message}`;
+                    submitStatus.textContent = `提交失败：${err.message}。已在本地生成画像：`;
                     submitStatus.style.color = '#dc3545';
                     console.error(err);
+                    submitBtn.disabled = false;
+
+                    try {
+                        const formData = collectFormData();
+                        const pageEndTime = Date.now();
+                        const elapsedMs = (pageStartTime && !timerStopped) ? (pageEndTime - pageStartTime) : 0;
+                        formData._timing = {
+                            startISO: new Date(pageStartTime).toISOString(),
+                            endISO: new Date(pageEndTime).toISOString(),
+                            elapsedMs: elapsedMs,
+                            elapsedSeconds: Math.round(elapsedMs / 1000)
+                        };
+
+                        const portraitObj = generateConsumptionPortrait(formData);
+                        portraitResult.innerHTML = '';
+                        portraitResult.style.display = 'block';
+                        if (portraitObj.imagePath) {
+                            const img = document.createElement('img');
+                            img.src = portraitObj.imagePath;
+                            img.alt = formData.age ? `${formData.age} 画像` : '用户画像';
+                            img.style.maxWidth = '160px';
+                            img.style.height = 'auto';
+                            img.style.display = 'block';
+                            img.style.margin = '0 auto 10px';
+                            img.loading = 'lazy';
+                            portraitResult.appendChild(img);
+                        }
+                        const txt = document.createElement('div');
+                        txt.textContent = portraitObj.text;
+                        portraitResult.appendChild(txt);
+                    } catch (e) { console.error(e); }
                 }
             });
 
-            // 生成画像按钮（保持）
-            generatePortraitBtn.addEventListener('click', function () {
-                const formData = collectFormData();
-                const portrait = generateConsumptionPortrait(formData);
-                portraitResult.style.display = 'block';
-                portraitResult.textContent = portrait;
-            });
+            // 保持原有的随机情景渲染脚本（略）...
+            (function renderRandomScenario() {
+                const scenarios = [
+                    { src: '吃席.png', caption: '过几天晚上要和领导吃饭，席间他可能会和你聊到加薪、晋升。你临时决定带一瓶白酒表示心意。时间紧、事情重要，你最可能去哪买？' },
+                    { src: '火锅场景.png', caption: '和一群好友约好几天后吃席，大家关系都很好，气氛热闹，你决定带瓶白酒来助助兴。你更倾从哪个渠道买白酒？' },
+                    { src: '家庭聚餐.png', caption: '周末家庭聚餐，你想买一瓶白酒来敬给家里的长辈，你会选哪类渠道购买？' },
+                ];
+
+                const container = document.getElementById('scenario-container');
+                if (!container || !scenarios.length) return;
+                const idx = Math.floor(Math.random() * scenarios.length);
+                const s = scenarios[idx];
+
+                container.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = s.src;
+                img.alt = s.caption.replace(/\s+/g, ' ').slice(0, 120);
+                img.loading = 'lazy';
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+                img.style.borderRadius = '6px';
+                img.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)';
+                container.appendChild(img);
+
+                const caption = document.createElement('div');
+                caption.className = 'scenario-caption';
+                caption.style.textAlign = 'left';
+                caption.style.marginTop = '8px';
+                caption.textContent = s.caption;
+                container.appendChild(caption);
+
+                container.setAttribute('aria-label', '当前问卷情景：' + (s.caption.slice(0, 60)));
+            })();
         });
-    </script>
+</script>
 </body>
 </html>
-
-
-
