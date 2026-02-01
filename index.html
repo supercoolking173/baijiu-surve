@@ -1813,11 +1813,11 @@
                     const result = await postSequential(WEBHOOK_URLS, payload, { timeoutMs: 8000 });
 
                     if (result.ok) {
-                        submitStatus.textContent = `问卷提交成功（由 ${result.url} 响应）！画像已为你生成：`;
+                        submitStatus.textContent = `提交成功！画像已为你生成：`;
                         submitStatus.style.color = '#28a745';
                         submitBtn.style.display = 'none';
                     } else {
-                        submitStatus.textContent = '提交失败（未成功上报）。已在本地生成画像：';
+                        submitStatus.textContent = '提交失败。已在本地生成画像：';
                         submitStatus.style.color = '#dc3545';
                         // 允许重试（保留按钮）
                         submitBtn.disabled = false;
@@ -1916,4 +1916,5 @@
 </script>
 </body>
 </html>
+
 
