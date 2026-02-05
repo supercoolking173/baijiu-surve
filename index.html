@@ -388,6 +388,33 @@
                 width: 100%;
             }
         }
+        /* 单独为居住地区题目设置换行样式 */
+        .region-options {
+            display: flex;
+            flex-wrap: wrap; /* 允许换行 */
+            column-gap: 10px; /* 横向间距 */
+            row-gap: 5px;       /* 选项之间的间距 */
+            margin-left: 20px;
+        }
+
+        .region-options .option-item {
+            flex: 0 0 calc(33.33% - 170px); /* 每行最多放3个选项 */
+            min-width: 20px;              /* 最小宽度，防止内容挤压 */
+            margin: 8px 0;
+        }
+
+        /* 小屏幕适配 */
+        @media (max-width: 768px) {
+            .region-options .option-item {
+                flex: 0 0 calc(50% - 12px); /* 每行最多放2个选项 */
+            }
+        }
+
+        @media (max-width: 520px) {
+            .region-options .option-item {
+                flex: 0 0 100%; /* 每行只放1个选项 */
+            }
+        }
 
         /* 拖拽题样式：横排选项、艺术字、红棕色容器、hover 效果 */
         .draggable-options {
@@ -395,7 +422,7 @@
             gap: 12px;
             align-items: center;
             margin: 0px 0 0px 0;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             overflow-x: auto; /* 横向滚动 */
             overflow-y: visible; /* 允许垂直方向溢出显示（修复悬停被裁剪） */
             padding-bottom: 18px;
@@ -406,7 +433,7 @@
         }
 
         .draggable-item {
-            flex: 0 0 auto;
+            flex: 0 0 calc(25% - 12px);
             min-width: 120px;
             padding: 10px 14px;
             border-radius: 10px;
@@ -454,6 +481,7 @@
             position: relative;
             z-index: 0;
         }
+
         /* 下方大容器 */
         .drop-zone {
             margin-top: 14px;
@@ -494,17 +522,14 @@
         }
 
         /* 在小屏幕上让选项自动换行或横向滚动更友好 */
-        @media (max-width: 520px) {
-            .draggable-item {
-                min-width: 100px;
-                padding: 8px 10px;
-                font-size: 0.95rem;
-            }
-
-            .drop-zone {
-                padding: 10px;
-            }
-        }
+        @media (max-width: 768px) {
+    .draggable-item {
+        flex: 0 0 calc(50% - 12px); /* 每行最多放2个 */
+        min-width: 100px;
+        padding: 8px 10px;
+        font-size: 0.95rem;
+    }
+}
         /* 情景示意图样式（追加到现有 style 末尾） */
         .scenario-image {
             text-align: center;
@@ -706,6 +731,34 @@
                 </div>
 
                 <div class="question">
+                    <p>你目前居住在哪个地区？</p>
+                    <div class="options region-options">
+                        <div class="option-item"><input type="radio" name="residence" id="residence-chengdu" value="成都" required> <label for="residence-chengdu">成都</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-mianyang" value="绵阳"> <label for="residence-mianyang">绵阳</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-nanchong" value="南充"> <label for="residence-nanchong">南充</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-dazhou" value="达州"> <label for="residence-dazhou">达州</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-yibin" value="宜宾"> <label for="residence-yibin">宜宾</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-luzhou" value="泸州"> <label for="residence-luzhou">泸州</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-deyang" value="德阳"> <label for="residence-deyang">德阳</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-guangyuan" value="广元"> <label for="residence-guangyuan">广元</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-suining" value="遂宁"> <label for="residence-suining">遂宁</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-leshan" value="乐山"> <label for="residence-leshan">乐山</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-ziyang" value="资阳"> <label for="residence-ziyang">资阳</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-meishan" value="眉山"> <label for="residence-meishan">眉山</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-yaan" value="雅安"> <label for="residence-yaan">雅安</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-bazhong" value="巴中"> <label for="residence-bazhong">巴中</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-zigong" value="自贡"> <label for="residence-zigong">自贡</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-panzhihua" value="攀枝花"> <label for="residence-panzhihua">攀枝花</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-guang'an" value="广安"> <label for="residence-guang'an">广安</label></div>
+                        <div class="option-item"><input type="radio" name="residence" id="residence-neijiang" value="内江"> <label for="residence-neijiang">内江</label></div>
+                        <div class="option-item">
+                            <input type="radio" name="residence" id="residence-other" value="其他"> <label for="residence-other">其他</label>
+                            <input type="text" name="residence-other" placeholder="请填写其他地区" class="other-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
                     <p>你大概属于哪一代酒友？</p>
                     <div class="options">
                         <div class="option-item"><input type="radio" name="age" id="age-18-25" value="18-25岁" required> <label for="age-18-25">18-25岁</label></div>
@@ -902,7 +955,7 @@
 
                 <div class="question">
                     <p>
-                        当你选白酒时，下面这些因素对你有多重要？    
+                        当你选白酒时，下面这些因素对你有多重要？
                     </p>
                     <!-- 替换：将原来的 rating-table 表格替换为下列滑动条布局 -->
                     <div class="rating-grid" id="preference-rating-grid">
@@ -1023,8 +1076,35 @@
                             <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
                                 <div class="caption">兼香型</div>
                             </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">董香型</div>
+                            </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">药香型</div>
+                            </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">馥郁香型</div>
+                            </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">老白干香型</div>
+                            </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">豉香型</div>
+                            </div>
+
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">芝麻香型</div>
+                            </div>
+                            <div class="draggable-item" draggable="true" data-value="兼香型" id="flavor-jian">
+                                <div class="caption">特香型</div>
+                            </div>
                         </div>
-                        
+
                         <div class="drop-zone" id="favorite-flavor-zone" aria-label="您最爱的香型容器">
                             <div class="drop-title">您最爱的香型</div>
                             <div class="drop-content" id="drop-content">
@@ -1293,8 +1373,8 @@
             <!-- 六、非白酒消费者调研 -->
             <section id="non-drinker" class="hidden">
                 <h2>第六关｜非白酒党解锁你的潜力</h2>
-               
-               
+
+
                 <div class="question">
                     <p>告诉我们，你为什么选择绕开白酒？</p>
                     <table class="rating-table">
@@ -1916,6 +1996,7 @@
 </script>
 </body>
 </html>
+
 
 
 
